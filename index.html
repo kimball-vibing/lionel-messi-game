@@ -1,0 +1,1330 @@
+<title>Where Is Lionel Messi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=VT323&display=swap">
+<style>
+/* Layout: one fixed 800x480 handheld screen, scaled to fit, with a short caption under it. Single retro look on purpose. */
+:root {
+  --field: #168a3f;      /* bright pitch green, the screen ground */
+  --field-2: #1a9849;    /* lighter mowing stripe */
+  --field-deep: #4fc3f7; /* sunny sky blue around the screen */
+  --paper: #fffdf5;      /* scoreboard white for panels and text */
+  --ink: #1b1b2f;        /* text on paper */
+  --stamp: #ff5a1f;      /* bright orange for drafts and alerts */
+  --glow: #ffd60a;       /* selection highlight */
+  --dim: #d4f7dc;        /* secondary text on green */
+  --edge: #0f6b30;       /* borders and dividers on green */
+  --key: #0f7a36;        /* on-screen keys */
+  --key-edge: #6fdc95;
+  --font-display: "Bungee", "Impact", "Arial Black", sans-serif;
+  --font-body: "VT323", "Courier New", ui-monospace, monospace;
+  color-scheme: light;
+}
+html, body { height: 100%; }
+body {
+  background: var(--field-deep);
+  color: var(--paper);
+  font-family: var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px;
+  box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.wrap { width: 100%; max-width: 800px; aspect-ratio: 800 / 480; position: relative; }
+.stage {
+  position: absolute; left: 0; top: 0; width: 800px; height: 480px;
+  transform-origin: 0 0; overflow: hidden;
+  background: repeating-linear-gradient(to right, var(--field) 0 80px, var(--field-2) 80px 160px); border-radius: 6px;
+  box-shadow: 0 0 0 4px var(--paper), 0 0 0 8px var(--stamp);
+  display: grid; grid-template-rows: 44px 1fr 30px;
+  font-size: 26px; line-height: 1.05;
+}
+.stage::after { /* faint scanlines */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.05) 2px 3px);
+}
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; background: var(--paper); color: var(--ink); }
+.bar .brand { font-family: var(--font-display); font-size: 15px; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar .clock { font-variant-numeric: tabular-nums; font-size: 24px; white-space: nowrap; }
+.bar .clock b { color: var(--stamp); font-weight: normal; }
+.body { padding: 14px 16px; display: grid; gap: 18px; min-height: 0; grid-template-columns: 1fr; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--glow) transparent; }
+.body.art-city { grid-template-columns: 360px 1fr; }
+.body.art-face { grid-template-columns: 320px 1fr; }
+.body.black { background: #000; }
+.foot-r { display: flex; gap: 8px; }
+.foot { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: var(--dim); font-size: 20px; border-top: 2px solid var(--edge); }
+.back { font: inherit; color: var(--paper); background: none; border: 2px solid var(--dim); padding: 0 10px; cursor: pointer; }
+.back:focus-visible { outline: 2px solid var(--glow); }
+.view { display: flex; flex-direction: column; gap: 8px; min-width: 0; min-height: 0; }
+canvas { display: block; image-rendering: pixelated; }
+canvas.art { width: 360px; height: 220px; border: 3px solid var(--paper); }
+canvas.face { width: 314px; height: 314px; border: 3px solid var(--paper); }
+.place { font-family: var(--font-display); font-size: 28px; color: var(--glow); line-height: 1; }
+.sub { color: var(--dim); font-size: 22px; }
+.sub.ok { color: var(--glow); }
+.menu { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.menu button {
+  width: 100%; text-align: left; font: inherit; color: var(--paper);
+  background: transparent; border: 2px solid transparent; padding: 5px 12px; cursor: pointer;
+  display: flex; justify-content: space-between; gap: 10px;
+}
+.menu button .k { color: var(--dim); }
+.menu button.sel { background: var(--glow); color: var(--ink); }
+.menu button.sel .k { color: var(--ink); }
+.menu button:focus-visible { border-color: var(--paper); outline: none; }
+.paper { background: var(--paper); color: var(--ink); padding: 12px 14px; font-size: 25px; line-height: 1.1; }
+.paper .who { font-family: var(--font-display); font-size: 14px; letter-spacing: .05em; color: var(--stamp); display: block; margin-bottom: 6px; }
+.title-screen.tight .logo .l { font-size: 44px; }
+.title-screen.tight .menu button { padding: 3px 12px; }
+.namebox { font-family: var(--font-display); font-size: 30px; color: var(--ink); background: var(--paper); min-width: 420px; padding: 6px 12px; text-align: center; }
+.caret { color: var(--stamp); animation: pulse 1s steps(2) infinite; }
+.vault { gap: 3px; }
+.vault .sub { margin: 2px 0 0; }
+.vgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; width: 100%; }
+.key.vkey { height: 26px; font-size: 16px; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.key.vkey.on { border-color: var(--glow); }
+.keys { display: grid; grid-template-columns: repeat(7, 60px); gap: 6px; }
+.key { font: inherit; color: var(--paper); background: var(--key); border: 2px solid var(--key-edge); height: 40px; cursor: pointer; }
+.key.wide { font-size: 20px; }
+.key.sel { background: var(--glow); color: var(--ink); border-color: var(--glow); }
+.hof { display: flex; flex-direction: column; gap: 6px; max-height: 250px; overflow: auto; }
+.hof div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed #c9b8a0; }
+.hof span { color: #6a6070; }
+.title-screen { display: grid; align-items: safe center; justify-items: center; text-align: center; gap: 10px; }
+.logo { font-family: var(--font-display); color: var(--glow); text-shadow: 4px 4px 0 var(--stamp); line-height: .95; }
+.logo .s { display: block; font-size: 24px; color: var(--paper); text-shadow: 3px 3px 0 var(--stamp); }
+.logo .l { display: block; font-size: 54px; }
+
+.stampbox.jailstamp { font-size: 14px; vertical-align: middle; margin-left: 8px; }
+.stampbox { display: inline-block; align-self: flex-start; border: 3px solid var(--stamp); color: var(--stamp); font-family: var(--font-display); font-size: 18px; padding: 2px 10px; transform: rotate(-4deg); background: var(--paper); }
+.notes { overflow: auto; min-height: 0; flex: 1; font-size: 22px; display: flex; flex-direction: column; gap: 4px; padding-right: 6px; }
+.notes p { margin: 0; }
+.notes .city { color: var(--glow); }
+.interpol { display: grid; grid-template-columns: 330px 1fr; gap: 18px; min-height: 0; }
+.interpol .menu button { padding: 3px 12px; }
+.names { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; align-content: start; font-size: 22px; }
+.names .out { color: #8fcfa3; }
+.dossier { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-size: 22px; }
+.dossier div { display: flex; justify-content: space-between; border-bottom: 1px dashed #c9b8a0; }
+.dossier span { color: #6a6070; }
+.dossier p { grid-column: 1 / -1; margin: 6px 0 0; font-size: 23px; }
+.pager { display: flex; gap: 12px; }
+.mugs { display: grid; grid-template-columns: repeat(5, 76px); gap: 6px 8px; align-content: start; }
+.mug { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 17px; text-align: center; line-height: .9; }
+.mug canvas { width: 64px; height: 64px; border: 2px solid var(--paper); }
+.mug.out { opacity: .25; }
+.mug.out canvas { border-color: var(--dim); }
+.mapbox { position: relative; width: 720px; height: 340px; align-self: center; border: 3px solid var(--paper); box-sizing: content-box; }
+.mapbox canvas { width: 720px; height: 340px; }
+.dot { position: absolute; width: 18px; height: 18px; margin: -9px 0 0 -9px; padding: 0; border: 3px solid var(--ink); border-radius: 50%; background: var(--stamp); cursor: pointer; }
+.dot.sel { background: var(--glow); outline: 3px solid var(--glow); outline-offset: 2px; animation: pulse .8s steps(2) infinite; }
+.dot:focus-visible { outline: 3px solid var(--paper); }
+.here { position: absolute; margin: -12px 0 0 -8px; font-size: 26px; color: var(--paper); text-shadow: 2px 2px 0 var(--ink); pointer-events: none; }
+.leaders { position: absolute; inset: 0; pointer-events: none; }
+.leaders line { stroke: var(--paper); stroke-width: 2; stroke-dasharray: 3 3; }
+.leaders line.on { stroke: var(--glow); stroke-dasharray: none; }
+.lbl { position: absolute; font-size: 18px; line-height: 22px; height: 22px; color: var(--ink); background: var(--paper); padding: 0 3px; pointer-events: none; white-space: nowrap; }
+.lbl.sel { background: var(--glow); }
+@keyframes pulse { 50% { outline-color: transparent; } }
+.fx { position: absolute; inset: 0; width: 800px; height: 480px; pointer-events: none; z-index: 2; }
+.boom.small { font-size: 24px; line-height: 1.15; }
+.boom { position: absolute; z-index: 3; font-family: var(--font-display); font-size: 40px; color: var(--glow); text-shadow: 3px 3px 0 var(--stamp); pointer-events: none; }
+canvas.street { width: 768px; height: 376px; }
+.slide { display: grid; grid-template-columns: repeat(3, 120px); gap: 4px; margin-top: 8px; }
+.tile { padding: 0; border: 2px solid var(--paper); background: #000; width: 120px; height: 74px; cursor: pointer; }
+.tile canvas { width: 116px; height: 70px; image-rendering: pixelated; display: block; }
+.tile.gap { border-color: transparent; background: none; }
+.key[disabled] { opacity: .3; }
+canvas.puzzle { width: 300px; height: 184px; image-rendering: pixelated; border: 3px solid var(--paper); }
+.boom-in { font-family: var(--font-display); font-size: 36px; color: var(--glow); text-shadow: 3px 3px 0 var(--stamp); }
+.spots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 6px; }
+.spot { font: inherit; color: var(--paper); background: none; border: 3px solid transparent; padding: 6px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.spot canvas { width: 216px; height: 180px; border: 3px solid var(--paper); }
+.spot .k { color: var(--dim); font-size: 20px; }
+.spot.sel { border-color: var(--glow); background: rgba(255,214,10,.18); }
+.spot.sel span:first-of-type { color: var(--glow); }
+.spot:focus-visible { outline: 2px solid var(--paper); }
+.jet { position: absolute; font-size: 30px; color: var(--glow); text-shadow: 2px 2px 0 var(--ink); pointer-events: none; transform: translate(-50%,-50%); }
+.caption { max-width: 800px; width: 100%; color: #0d3b66; font-size: 20px; line-height: 1.2; text-align: center; text-wrap: balance; }
+@media (prefers-reduced-motion: reduce) { .dot.sel { animation: none; } }
+</style>
+
+<div class="wrap" id="wrap"><div class="stage" id="stage" aria-live="polite"></div></div>
+<p class="caption">Preview of the 800×480 handheld screen. Use the arrow keys and Enter (Esc goes back), or click and tap.</p>
+
+<script src="art/landmarks.js"></script>
+<script src="art/people.js"></script>
+<script src="art/sprites.js"></script>
+<script src="clues.js"></script>
+<script src="sound.js"></script>
+<script>
+const AGENCY = "G.O.A.T. SCOUTS";
+const AGENCY_LONG = "Getting Our All-stars Together";
+
+/* ---------- cities and their 16-clue banks ---------- */
+const CITIES = {
+  paris: { name: "Paris", lat: 48.9, lon: 2.4, sky: "#e7a0a8", ground: "#5a7a4a", },
+  tokyo: { name: "Tokyo", lat: 35.7, lon: 139.7, sky: "#f2b6c9", ground: "#4a6a5a", },
+  cairo: { name: "Cairo", lat: 30.0, lon: 31.2, sky: "#f1c27b", ground: "#d9b46a", },
+  rio: { name: "Rio de Janeiro", lat: -22.9, lon: -43.2, sky: "#8fd3c8", ground: "#3a8a5a", },
+  mumbai: { name: "Mumbai", lat: 19.1, lon: 72.9, sky: "#f0a868", ground: "#8a6a3a", },
+  sydney: { name: "Sydney", lat: -33.9, lon: 151.2, sky: "#9cc8f0", ground: "#3a7ab0", },
+  reykjavik: { name: "Reykjavik", lat: 64.1, lon: -21.9, sky: "#a9b8e8", ground: "#4a4a5a", },
+  mexico: { name: "Mexico City", lat: 19.4, lon: -99.1, sky: "#f5b183", ground: "#8a7a4a", },
+  istanbul: { name: "Istanbul", lat: 41.0, lon: 29.0, sky: "#e3b0d9", ground: "#3a6aa0", },
+  nairobi: { name: "Nairobi", lat: -1.3, lon: 36.8, sky: "#f3c46b", ground: "#a08a4a", },
+  london: { name: "London", lat: 51.5, lon: -0.1, sky: "#b8c4d6", ground: "#5a6a5a", },
+  newyork: { name: "New York", lat: 40.7, lon: -74.0, sky: "#f0c0a0", ground: "#5a5a6a", },
+  beijing: { name: "Beijing", lat: 39.9, lon: 116.4, sky: "#e8b4a0", ground: "#6a7a4a", },
+  buenosaires: { name: "Buenos Aires", lat: -34.6, lon: -58.4, sky: "#a8d0e8", ground: "#5a8a4a", },
+  rome: { name: "Rome", lat: 41.9, lon: 12.5, sky: "#f0c890", ground: "#7a8a4a", },
+  bangkok: { name: "Bangkok", lat: 13.8, lon: 100.5, sky: "#f4b0a0", ground: "#5a8a6a", },
+};
+const CITY_IDS = Object.keys(CITIES);
+/* Places each city really has: no palace in Reykjavik, no harbor in Mexico City. Three are picked each time you land. */
+const CITY_PLACES = {
+  paris: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station"],
+  tokyo: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station", "harbor"],
+  cairo: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station"],
+  rio: ["bank", "hotel", "sports", "museum", "airport", "library", "market", "harbor"],
+  mumbai: ["bank", "hotel", "sports", "museum", "airport", "library", "market", "station", "harbor"],
+  sydney: ["bank", "hotel", "sports", "museum", "airport", "library", "market", "station", "harbor"],
+  reykjavik: ["bank", "hotel", "sports", "museum", "airport", "library", "market", "harbor"],
+  mexico: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market"],
+  istanbul: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station", "harbor"],
+  nairobi: ["bank", "hotel", "sports", "museum", "airport", "library", "market", "station"],
+  london: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station", "harbor"],
+  newyork: ["bank", "hotel", "sports", "museum", "airport", "library", "market", "station", "harbor"],
+  beijing: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station"],
+  buenosaires: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "harbor"],
+  rome: ["bank", "hotel", "sports", "palace", "museum", "airport", "library", "market", "station"],
+  bangkok: ["bank", "hotel", "sports", "palace", "museum", "airport", "market", "station", "harbor"],
+};
+const rollPlaces = id => shuffle(CITY_PLACES[id] || Object.keys(PLACE_TYPES)).slice(0, 3);
+const PLACE_TYPES = {
+  bank: "Bank", hotel: "Hotel", sports: "Sports club", palace: "Palace", museum: "Museum",
+  airport: "Airport", library: "Library", market: "Market", station: "Train station", harbor: "Harbor",
+};
+/* Who you meet in each region: skin tones (index into SKIN) and hair colors. */
+const REGIONS = {
+  north: { skin: [0, 0, 4, 1], hair: ["Blond", "Brown", "Red", "Blond", "Brown"] },
+  south: { skin: [0, 4, 1, 4], hair: ["Brown", "Black", "Brown", "Black", "Blond"] },
+  mideast: { skin: [1, 4, 2], hair: ["Black", "Black", "Brown"] },
+  africa: { skin: [3, 5, 3, 2], hair: ["Black"] },
+  southasia: { skin: [2, 1, 2, 3], hair: ["Black"] },
+  eastasia: { skin: [4, 0, 4, 1], hair: ["Black", "Black", "Brown"] },
+  latin: { skin: [1, 2, 4, 3, 0], hair: ["Black", "Brown", "Black", "Blond"] },
+  mixed: { skin: [0, 1, 2, 3, 4], hair: ["Black", "Brown", "Blond", "Red"] },
+};
+const REGION_OF = { paris: "south", rome: "south", istanbul: "mideast", london: "north", reykjavik: "north", cairo: "mideast",
+  nairobi: "africa", mumbai: "southasia", tokyo: "eastasia", beijing: "eastasia", bangkok: "eastasia",
+  rio: "latin", mexico: "latin", buenosaires: "latin", sydney: "mixed", newyork: "mixed" };
+const NOT_SEEN = ["Sorry, scout. I haven't seen anyone like that around here.", "Nobody like that has come through here.",
+  "I've been here all day and seen no one suspicious.", "Never seen them. Are you sure you're in the right city?"];
+const CLOSE = ["A GOAT was signing autographs here a moment ago. You're getting close!", "Someone in a cap just jogged past. You're getting close!",
+  "I heard a ball bouncing around the corner. You're very close now.", "Someone was asking whether a scout was in town. You're getting close!"];
+
+/* ---------- suspects ---------- */
+const TRAITS = {
+  sex: { label: "Sex", values: ["Female", "Male"] },
+  hair: { label: "Hair", values: ["Black", "Brown", "Blond", "Red", "Pink", "Bald"] },
+  hobby: { label: "Sport", values: ["Soccer", "Tennis", "Basketball", "Track", "Swimming", "Gymnastics", "Skiing", "Football", "Golf"] },
+  feature: { label: "Gear", values: ["Headband", "Wristbands", "Gold chain", "Cap"] },
+  vehicle: { label: "Ride", values: ["Sports car", "Motorcycle", "Golf cart"] },
+};
+/* The GOATs: the most famous real all-time greats, scouted and drafted. Hair and sport are true to life; gear and ride are game traits. */
+const SUSPECTS = [
+  { id: "serena",  name: "Serena Williams",    sex: "Female", hair: "Black", hobby: "Tennis",     feature: "Headband",   vehicle: "Sports car", skin: "#7a4a2e",
+    bio: "Won 23 Grand Slam singles titles. Her serve can go faster than most cars on the highway." },
+  { id: "venus",   name: "Venus Williams",     sex: "Female", hair: "Black", hobby: "Tennis",     feature: "Gold chain", vehicle: "Golf cart",  skin: "#7a4a2e",
+    bio: "Won Wimbledon five times. Serena's big sister, and the first of the two to reach world number one." },
+  { id: "osaka",   name: "Naomi Osaka",        sex: "Female", hair: "Black", hobby: "Tennis",     feature: "Cap",        vehicle: "Motorcycle", skin: "#a86e4a",
+    bio: "Won four Grand Slam titles and lit the Olympic cauldron in Tokyo." },
+  { id: "biles",   name: "Simone Biles",       sex: "Female", hair: "Black", hobby: "Gymnastics", feature: "Gold chain", vehicle: "Motorcycle", skin: "#7a4a2e",
+    bio: "So good that several gymnastics moves are named after her." },
+  { id: "rapinoe", name: "Megan Rapinoe",      sex: "Female", hair: "Pink",  hobby: "Soccer",     feature: "Wristbands", vehicle: "Sports car", skin: "#f1c9a5",
+    bio: "Won two World Cups with the USA. Famous for her bright-colored hair and her arms-out goal pose." },
+  { id: "morgan",  name: "Alex Morgan",        sex: "Female", hair: "Brown", hobby: "Soccer",     feature: "Headband",   vehicle: "Golf cart",  skin: "#e8b98f",
+    bio: "Two-time World Cup champion who scored 123 goals for the USA." },
+  { id: "clark",   name: "Caitlin Clark",      sex: "Female", hair: "Brown", hobby: "Basketball", feature: "Wristbands", vehicle: "Motorcycle", skin: "#f1c9a5",
+    bio: "Scored the most points in college basketball history, then became a WNBA star." },
+  { id: "vonn",    name: "Lindsey Vonn",       sex: "Female", hair: "Blond", hobby: "Skiing",     feature: "Cap",        vehicle: "Sports car", skin: "#f1c9a5",
+    bio: "Won 82 World Cup ski races and Olympic downhill gold in 2010." },
+  { id: "jordan",  name: "Michael Jordan",     sex: "Male",   hair: "Bald",  hobby: "Basketball", feature: "Wristbands", vehicle: "Sports car", skin: "#5a3520",
+    bio: "Six NBA titles. Sticks out his tongue when he flies in for a dunk." },
+  { id: "lebron",  name: "LeBron James",       sex: "Male",   hair: "Black", hobby: "Basketball", feature: "Headband",   vehicle: "Motorcycle", skin: "#7a4a2e",
+    bio: "The NBA's all-time top scorer, with four championships." },
+  { id: "ronaldo", name: "Cristiano Ronaldo",  sex: "Male",   hair: "Black", hobby: "Soccer",     feature: "Gold chain", vehicle: "Sports car", skin: "#d9a47c",
+    bio: "Has scored more official goals than anyone in soccer history. Famous for his SIUUU celebration." },
+  { id: "bolt",    name: "Usain Bolt",         sex: "Male",   hair: "Black", hobby: "Track",      feature: "Gold chain", vehicle: "Golf cart",  skin: "#5a3520",
+    bio: "The fastest human ever timed: 9.58 seconds for 100 meters. Good luck catching him." },
+  { id: "brady",   name: "Tom Brady",          sex: "Male",   hair: "Brown", hobby: "Football",   feature: "Cap",        vehicle: "Motorcycle", skin: "#f1c9a5",
+    bio: "Won seven Super Bowls, more than any NFL team." },
+  { id: "federer", name: "Roger Federer",      sex: "Male",   hair: "Brown", hobby: "Tennis",     feature: "Headband",   vehicle: "Sports car", skin: "#e8b98f",
+    bio: "Won Wimbledon eight times, a men's record." },
+  { id: "phelps",  name: "Michael Phelps",     sex: "Male",   hair: "Brown", hobby: "Swimming",   feature: "Cap",        vehicle: "Golf cart",  skin: "#f1c9a5",
+    bio: "Won 23 Olympic gold medals, the most of anyone ever." },
+  { id: "tiger",   name: "Tiger Woods",        sex: "Male",   hair: "Black", hobby: "Golf",       feature: "Cap",        vehicle: "Golf cart",  skin: "#a86e4a",
+    bio: "Won 15 major golf championships. Always wears red on the final day." },
+  { id: "deskin",  name: "Deskin Behrend",     sex: "Male",   age: "young", hair: "Red", hobby: "Soccer",     feature: "Headband",   vehicle: "Golf cart",  skin: "#f1c9a5",
+    bio: "The rising star of the soccer world. Scouts say he could be the next Messi." },
+  { id: "messi",   name: "Lionel Messi",       sex: "Male",   hair: "Brown", hobby: "Soccer",     feature: "Wristbands", vehicle: "Sports car", skin: "#e8b98f",
+    bio: "World Cup champion with Argentina in 2022 and winner of a record eight Ballon d'Or awards. The greatest GOAT of them all, and the hardest to find." },
+];
+const TRAIT_SENTENCE = {
+  hair: v => v === "Bald" ? "had a shiny bald head." : v === "Pink" ? "had bright pink hair." : `had ${v.toLowerCase()} hair.`,
+  hobby: v => ({ Soccer: "was doing keepy-uppies with a soccer ball.", Tennis: "was carrying a tennis racket.", Track: "was jogging in place in spiked running shoes.",
+                 Swimming: "had swim goggles pushed up on the forehead.", Gymnastics: "did a backflip off the front steps.", Basketball: "was spinning a basketball on one finger.",
+                 Football: "was tossing an American football.", Skiing: "was carrying a pair of skis.", Golf: "was practicing a golf swing with an umbrella." })[v],
+  feature: v => ({ Headband: "was wearing a sweatband headband.", Wristbands: "had sweatbands on both wrists.",
+                   "Gold chain": "wore a shiny gold chain.", Cap: "wore a cap pulled down low." })[v],
+  vehicle: v => ({ "Sports car": "asked where to park a sports car.", Motorcycle: "rode off on a motorcycle.", "Golf cart": "zoomed away in a golf cart." })[v],
+};
+
+const RANKS = [
+  { name: "Rookie", at: 0, cities: 4 },
+  { name: "Scout", at: 1, cities: 5 },
+  { name: "Head Scout", at: 3, cities: 6 },
+  { name: "Talent Hunter", at: 7, cities: 7 },
+  { name: "Ace Scout", at: 15, cities: 8 },
+];
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "next Mon", "next Tue", "next Wed", "next Thu"];
+const START_T = 9, DEADLINE_T = 9 * 24 + 17; // Monday 9 AM to next Wednesday 5 PM
+const NOTES_H = 1;
+
+/* World land mask: 180x85 cells of 2 degrees, latitude 80N to 90S. */
+const MASK = "AAAAAAI3//////AAH+AAAAAHwAAAAAAAAAABJLPh////AABgAAAQAAbAAAAAAAAAAA+K/AB///gAAAAAOAA//gAcAAAAAAAP7ffwA///AAAAAAQEP///4OAACAHAAJfDf/A//+AAABAAQP///////ACB/////F2PAf/8AAAf+AL//////////w//////2H4f+AAAB//v//////////+z//////2XgPwB4AD79///////////8I//////GBwHgAgAPn////////////8B/////+AeADAAAA/n//////////8/AAeA///+AfQAAAAAfj//////////IwAAJAP///wf8AAAAYLn/////////wDwAAAAF///+/+AAAA4Mv/////////ADgAAAAB///+//AAABuf//////////4DAAAAAA//////AAAAN///////////0CAAAAAAP////5gAAAP///////////0AAAAAAAP////wAAAAH///////////kAAAAAAAP////4AAAAH9/p////////AAAAAAAAP///+AAAAA/m/A///////+EAAAAAAAP///8AAAAB+Jvf///////4IAAAAAAAP///4AAAAB8It///////4wIAAAAAAAH///wAAAAA54E///////+Y4AAAAAAAH///wAAAAAf4AD//////8TwAAAAAAAB///AAAAAA/+AH//////+GAAAAAAAAA///AAAAAB//v///////+AAAAAAAAAAf+DAAAAAB////9/////+AAAAAAAAAAf8BAAAAAH///7+f////8AAAAAAAAAAL4AAAAAAP////+T////8AAAAAAAAAAB4BgAAAAP///9/8P///yAAAAAAAAAAB4QQAAAAP///+/8H/P9AAAAAAAAAAAA8wHAAAAP///+/4D8H6AAAAAAAAAAAAPwAAAAAP////fgD4H8CAAAAAAAAAAAA8AAAAAf////fABwB+CAAAAAAAAAAAAcAAAAAf////4ABwB+BAAAAAAAAAAAAENgAAAP////3AAwBMBgAAAAAAAAAAADf8AAAH////+AAoBAAgAAAAAAAAAAAAf+AAAD////+AAIAgIgAAAAAAAAAAAAf/wAAB8f//8AAACwcAAAAAAAAAAAAAf/4AAAAH//4AAABQ4AAAAAAAAAAAAA//4AAAAH//wAAABz5IAAAAAAAAAAAA//+AAAAP//gAAAAx6SAAAAAAAAAAAA///wAAAH//AAAAAZ2B8AAAAAAAAAAB///8AAAD//AAAAAIAA+QAAAAAAAAAA///+AAAD//AAAAAHAAfAAAAAAAAAAAf//8AAAD//AAAAAANAJAAAAAAAAAAAf//8AAAB//AAAAAAAAAAAAAAAAAAAAP//4AAAD//CAAAAAAHEAAAAAAAAAAAP//4AAAD//iAAAAAA/GAAAAAAAAAAAD//4AAAD//OAAAAAB/+AAAAAAAAAAAB//wAAAD/8OAAAAAB//AAAAAAAAAAAB//wAAAB/8MAAAAAP//gIAAAAAAAAAB//gAAAB/8MAAAAAf//gAAAAAAAAAAD/8AAAAB/4IAAAAAf//wAAAAAAAAAAD/8AAAAB/4AAAAAAf//4AAAAAAAAAAD/4AAAAA/wAAAAAAf//4AAAAAAAAAAD/4AAAAAfgAAAAAAP//4AAAAAAAAAAD/wAAAAAfAAAAAAAPh/wAAAAAAAAAAD/gAAAAAAAAAAAAAIAfgAAAAAAAAAAH/AAAAAAAAAAAAAAAAPgAQAAAAAAAAH+AAAAAAAAAAAAAAAAAAAYAAAAAAAAH4AAAAAAAAAAAAAAAABAAwAAAAAAAAHwAAAAAAAAAAAAAAAABABgAAAAAAAAPgAAAAAAAAAAAAAAAAAADAAAAAAAAAHgAAAAAAAAAAAAAAAAAACAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHCAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAAAAAAAAF8AD////8AAAAAAAAAAAC4AAAAAAAA//4//////+AAAAAAAAAAH4AAAC7/////7///////+AAAAAAAP434AAAP//////////////8AAAA//////4AAAf//////////////4AAHP/////+AAB////////////////0AAx//////yAHD////////////////4AAB///////gef////////////////gAAH///////////////////////////D/////////////////////////////////////////////////////////////////////////////////////////8=";
+
+/* Sports trivia for promotion exams and riddle hints. The first option is always the right one; options are shuffled on screen. */
+const TRIVIA = [
+  ["How many players does each soccer team have on the field?", ["11", "9", "10", "12"]],
+  ["Which country has won the most men's soccer World Cups?", ["Brazil", "Germany", "Italy", "Argentina"]],
+  ["In which sport would you see a slam dunk?", ["Basketball", "Volleyball", "Tennis", "Hockey"]],
+  ["How long is a marathon?", ["42.195 km", "26 km", "50 km", "40 km"]],
+  ["Which tennis Grand Slam is played on grass?", ["Wimbledon", "The French Open", "The US Open", "The Australian Open"]],
+  ["How many rings are on the Olympic flag?", ["5", "4", "6", "7"]],
+  ["Which sport uses a shuttlecock?", ["Badminton", "Squash", "Table tennis", "Tennis"]],
+  ["How many points is a touchdown worth in American football?", ["6", "3", "7", "5"]],
+  ["In golf, what do you call one stroke under par on a hole?", ["A birdie", "An eagle", "A bogey", "An albatross"]],
+  ["The Stanley Cup is the trophy for which sport?", ["Ice hockey", "Baseball", "Basketball", "Rugby"]],
+  ["Which sport is often called Japan's national sport?", ["Sumo", "Judo", "Baseball", "Karate"]],
+  ["Which city hosted the first modern Olympics in 1896?", ["Athens", "Paris", "London", "Rome"]],
+  ["How many holes are in a standard round of golf?", ["18", "9", "12", "21"]],
+  ["The Tour de France is a race in which sport?", ["Cycling", "Running", "Car racing", "Sailing"]],
+  ["Which country did cricket begin in?", ["England", "India", "Australia", "South Africa"]],
+  ["How many players does each basketball team have on the court?", ["5", "6", "7", "4"]],
+  ["What color jersey does the leader of the Tour de France wear?", ["Yellow", "Pink", "Green", "Red"]],
+  ["The Ballon d'Or is an award in which sport?", ["Soccer", "Tennis", "Golf", "Basketball"]],
+  ["Which country won the 2022 men's soccer World Cup?", ["Argentina", "France", "Croatia", "Brazil"]],
+  ["In tennis, what word means a score of zero?", ["Love", "Nil", "Duck", "Zip"]],
+  ["In bowling, what do you call three strikes in a row?", ["A turkey", "A hat trick", "A spare", "A triple"]],
+  ["Who has won the most Olympic gold medals ever?", ["Michael Phelps", "Usain Bolt", "Carl Lewis", "Simone Biles"]],
+  ["In which sport do you hit a home run?", ["Baseball", "Cricket", "Golf", "Soccer"]],
+  ["How many periods are in an ice hockey game?", ["3", "2", "4", "5"]],
+  ["The Super Bowl is the championship of which sport?", ["American football", "Soccer", "Baseball", "Basketball"]],
+  ["What do sumo wrestlers throw into the ring before a bout?", ["Salt", "Rice", "Sand", "Flowers"]],
+  ["How often are the Summer Olympics held?", ["Every 4 years", "Every 2 years", "Every year", "Every 5 years"]],
+  ["Which sport uses a pommel horse?", ["Gymnastics", "Polo", "Rodeo", "Show jumping"]],
+  ["Muay Thai comes from which country?", ["Thailand", "Japan", "China", "Korea"]],
+  ["How many players does each rugby union team have on the field?", ["15", "11", "13", "7"]],
+  ["How long is an Olympic swimming pool?", ["50 meters", "25 meters", "100 meters", "75 meters"]],
+  ["In soccer, what do you call three goals by one player in a game?", ["A hat trick", "A treble", "A turkey", "A triple"]],
+].map(([q, opts]) => ({ q, opts, a: 0 }));
+
+/* ---------- helpers ---------- */
+const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const fmtTime = t => { const h = t % 24; const h12 = h % 12 === 0 ? 12 : h % 12; return `${DAYS[Math.floor(t / 24)]} ${h12}:00 ${h < 12 ? "AM" : "PM"}`; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hash = s => [...String(s)].reduce((a, ch) => (a * 31 + ch.charCodeAt(0)) >>> 0, 7);
+const seeded = seed => { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); };
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+function flightHours(a, b) {
+  const A = CITIES[a], B = CITIES[b], r = Math.PI / 180;
+  const d = 2 * 6371 * Math.asin(Math.sqrt(Math.sin((B.lat - A.lat) * r / 2) ** 2 +
+    Math.cos(A.lat * r) * Math.cos(B.lat * r) * Math.sin((B.lon - A.lon) * r / 2) ** 2));
+  return Math.max(2, Math.min(12, Math.round(d / 850) + 1));
+}
+
+/* ---------- state ---------- */
+let S = null;      // current case
+/* Detectives on this device, keyed by lower-case name. P is the signed-in detective (null until someone signs in). */
+let PROFILES = store.get("csf-profiles") || {};
+let P = null, ui = "login", nameBuf = "";
+let HOF = store.get("csf-hof") || [];
+function saveProfile() { if (P) { PROFILES[P.key || P.name.toLowerCase()] = P; store.set("csf-profiles", PROFILES); } }
+/* Secret test detective: sign in as "entervault". Starts as an Ace with everyone free; never enters the Hall of Fame. */
+const VAULT = "entervault";
+function signIn(name) {
+  let key = name.trim().toLowerCase();
+  if (key.replace(/\s+/g, "") === VAULT) key = VAULT;
+  P = PROFILES[key] || (PROFILES[key] = key === VAULT
+    ? { name: "Vault", dev: true, solved: RANKS[RANKS.length - 1].at, rank: RANKS.length - 1, jailed: [], freeStart: true, created: Date.now() }
+    : { name: name.trim(), solved: 0, rank: 0, created: Date.now() });
+  P.key = key; // each detective's progress and save live under their own sign-in name
+  if (P.dev && PROFILES.vault && PROFILES.vault.dev) delete PROFILES.vault; // stray copy from older builds
+  if (P.dev && !P.freeStart) { P.jailed = []; P.freeStart = true; } // older Vault detectives started with everyone in jail
+  P.last = Date.now(); saveProfile(); SFX.muted = !!P.mute; ui = null; S = null;
+}
+let sel = 0;       // highlighted menu row
+let flash = "";    // one-time message under the menu
+
+const rankIdx = () => P.rank || 0;
+/* The jail: suspects you've locked up drop off Interpol and the Dossiers. Bella Ruse always escapes until she's the last one free. */
+const GANG_IDS = SUSPECTS.filter(s => s.id !== "messi").map(s => s.id);
+const jailed = () => (P && P.jailed) || [];
+const freeGang = () => GANG_IDS.filter(id => !jailed().includes(id));
+const roster = () => SUSPECTS.filter(s => !jailed().includes(s.id));
+const bellaStays = () => freeGang().join() === "bella" && rankIdx() === RANKS.length - 1;
+const rankOf = () => RANKS[rankIdx()];
+const examDue = () => rankIdx() < RANKS.length - 1 && P.solved >= RANKS[rankIdx() + 1].at;
+const thief = () => SUSPECTS.find(s => s.id === S.thief);
+const pron = () => thief().sex === "Female" ? "She" : "He";
+
+/* Three witness clues per city about the NEXT city. Higher ranks get more hard clues,
+   and more often two witnesses repeat the same thing. */
+function pickClues(route, ri) {
+  const hardShare = [0.15, 0.35, 0.55, 0.75, 0.9][ri], dup = [0.15, 0.25, 0.35, 0.45, 0.55][ri];
+  return route.map((_, i) => {
+    if (i === route.length - 1) return null;
+    const bank = window.CLUE_BANK[route[i + 1]], easy = shuffle(bank.easy), hard = shuffle(bank.hard);
+    const three = [0, 1, 2].map(() => (Math.random() < hardShare ? hard : easy).pop());
+    if (Math.random() < dup) { const a = rint(0, 2), b = (a + rint(1, 2)) % 3; three[b] = three[a]; }
+    return three;
+  });
+}
+
+/* Once you are an Ace Scout and every GOAT is drafted, the next case is Lionel Messi himself. */
+const bossDue = () => rankIdx() === RANKS.length - 1 && freeGang().length === 0 && !P.caughtCameron;
+function newCase(force, trail) {
+  const ri = rankIdx(), rank = RANKS[ri], boss = force ? force === "messi" : bossDue();
+  const route = trail ? trail.slice() : shuffle(CITY_IDS).slice(0, boss ? 9 : rank.cities);
+  const free = freeGang(), tid = force || (boss ? "messi" : pick(free.length ? free : GANG_IDS)), t = SUSPECTS.find(x => x.id === tid);
+  // Pick trait clues until they (plus the sex) point to exactly one suspect.
+  let pool = SUSPECTS.filter(s => s.sex === t.sex);
+  const traits = [];
+  for (const k of shuffle(["hair", "hobby", "feature", "vehicle"])) {
+    if (pool.length === 1 && traits.length >= 2) break;
+    traits.push(k); pool = pool.filter(s => s[k] === t[k]);
+  }
+  // Trait clues go in the cities before the last one, at different places.
+  const n = route.length - 1, traitAt = {};
+  const slots = shuffle([...Array(n).keys()]);
+  traits.forEach((k, j) => {
+    const ci = slots[j % n];
+    const used = (traitAt[ci] ||= []).map(x => x.place);
+    traitAt[ci].push({ k, place: shuffle([0, 1, 2].filter(p => !used.includes(p)))[0] });
+  });
+  S = {
+    screen: "brief", boss, thief: t.id, route, city: route[0], cameFrom: null, rank: rank.name, names: ri < 2,
+    time: START_T, bedtimes: Array.from({ length: 11 }, () => rint(21, 24)),
+    traitAt, clues: pickClues(route, ri),
+    flyOptions: {}, visited: {}, places: Object.fromEntries(CITY_IDS.map(c => [c, rollPlaces(c)])),
+    interpol: { sex: null, hair: null, hobby: null, feature: null, vehicle: null },
+    warrant: null, notes: [], finalVisits: 0, witness: null, flyTo: null, result: null, slept: false, henchman: false,
+  };
+}
+
+/* Spend hours. Passing tonight's bedtime means sleeping until 9 AM. */
+function advance(hours) {
+  const day = Math.floor(S.time / 24);
+  S.time += hours; S.slept = false;
+  if (S.time >= day * 24 + S.bedtimes[day]) { S.time = (day + 1) * 24 + 9; S.slept = true; }
+  if (S.time >= DEADLINE_T) { end("time"); return false; }
+  return true;
+}
+
+function end(why) {
+  if (why === "caught") why = S.warrant === S.thief ? "win" : (S.warrant ? "wrong" : "nowarrant");
+  S.result = why; S.screen = "end";
+  if (why === "win") {
+    P.solved++; S.examDue = !S.boss && examDue();
+    if (!S.boss && (S.thief !== "bella" || bellaStays())) { P.jailed = [...new Set([...jailed(), S.thief])]; S.jailed = true; }
+    if (S.thief === "bella" && !S.jailed) { S.bellaEscapes = true; P.jailed = jailed().filter(x => x !== "bella"); }
+    if (S.boss && !P.dev) { P.caughtCameron = (P.caughtCameron || 0) + 1; HOF.push({ name: P.name, date: new Date().toISOString().slice(0, 10), solved: P.solved, rank: rankOf().name }); store.set("csf-hof", HOF); }
+  }
+  delete P.save; saveProfile();
+}
+
+function flyOptions(id) {
+  if (S.flyOptions[id]) return S.flyOptions[id];
+  const i = S.route.indexOf(id);
+  const next = (i >= 0 && i < S.route.length - 1) ? S.route[i + 1] : null;
+  const keep = [next, S.cameFrom].filter(Boolean);
+  const others = shuffle(CITY_IDS.filter(c => c !== id && !keep.includes(c)));
+  return (S.flyOptions[id] = shuffle([...keep, ...others.slice(0, 5 - keep.length)]));
+}
+
+function investigate(p) {
+  const id = S.city, i = S.route.indexOf(id), Pn = pron();
+  if (!advance(rint(1, 3))) return;
+  const visited = (S.visited[id] ||= [false, false, false]);
+  const isFinal = i === S.route.length - 1;
+  const ptype = S.places[id][p], place = PLACE_TYPES[ptype];
+  let text, danger = null;
+  if (i === -1) text = NOT_SEEN[hash(id + p) % NOT_SEEN.length];
+  else if (isFinal) {
+    S.finalVisits++;
+    if (S.finalVisits >= 2) { S.screen = "chase"; return; }
+    text = pick(CLOSE);
+  } else {
+    text = `${Pn} ${S.clues[i][p]}`;
+    for (const tr of S.traitAt[i] || []) if (tr.place === p) text += ` Also, ${Pn.toLowerCase()} ${TRAIT_SENTENCE[tr.k](thief()[tr.k])}`;
+  }
+  // Now and then Bella Ruse poses as a witness (her eyes keep darting) and plants a fake clue about a decoy city.
+  let bella = false, real = text;
+  if (i >= 0 && !isFinal && S.thief !== "bella" && !(S.bellaSeen ||= {})[id] && Math.random() < [0.08, 0.12, 0.16, 0.2, 0.24][rankIdx()]) {
+    const decoy = pick(CITY_IDS.filter(c => c !== id && c !== S.route[i + 1] && !S.route.slice(0, i).includes(c)));
+    bella = true; S.bellaSeen[id] = true;
+    text = `${Pn} ${pick(window.CLUE_BANK[decoy].easy)}`;
+  }
+  if (isFinal || !S.notes.some(n => n.text === text)) S.notes.push({ city: CITIES[id].name, place, text });
+  visited[p] = true;
+  S.witness = { place, ptype, text, seed: hash(id + p + S.thief), danger, bella, real };
+  S.screen = danger ? "danger" : "witness";
+}
+
+const matching = () => roster().filter(s => Object.entries(S.interpol).every(([k, v]) => !v || s[k] === v));
+function updateWarrant() { const m = matching(); S.warrant = m.length === 1 ? m[0].id : null; }
+
+/* ---------- pixel drawing kit ---------- */
+function kit(g) {
+  const R = (x, y, w, h, c) => { g.fillStyle = c; g.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); };
+  // Filled trapezoid between a top edge (y0, xl0..xr0) and a bottom edge (y1, xl1..xr1).
+  const trap = (xl0, xr0, y0, xl1, xr1, y1, c) => {
+    g.fillStyle = c;
+    for (let y = y0; y <= y1; y++) { const f = y1 === y0 ? 0 : (y - y0) / (y1 - y0);
+      const a = Math.round(xl0 + (xl1 - xl0) * f), b = Math.round(xr0 + (xr1 - xr0) * f); g.fillRect(a, y, b - a + 1, 1); }
+  };
+  const oval = (cx, cy, rx, ry, c, yMax = 1e9) => {
+    g.fillStyle = c;
+    for (let y = -ry; y <= ry; y++) { if (cy + y > yMax) break; const w = Math.round(rx * Math.sqrt(1 - (y / (ry + .5)) ** 2)); g.fillRect(cx - w, cy + y, w * 2 + 1, 1); }
+  };
+  return { R, trap, oval };
+}
+
+/* ---------- art: drawn by art/landmarks.js, art/people.js and art/sprites.js ---------- */
+const INK = "#1d1a2e", WHITE = "#f3e9d2", GOLD = "#f7d046", RED = "#c8323c";
+const HAIR = { Black: "#1d1a2e", Brown: "#6b4226", Red: "#b4462b", Blond: "#e8c15a", Pink: "#f06aa8", Bald: "#5a3520" };
+const SKIN = ["#f1c9a5", "#d9a47c", "#a86e4a", "#7a4a2e", "#e8b98f", "#5a3520"];
+const facePerson = s => ({ ...s, seed: hash(s.id), style: "suspect" });
+
+/* ---------- world map ---------- */
+let maskBits = null;
+function drawMap(cv) {
+  if (!maskBits) { const raw = atob(MASK); maskBits = new Uint8Array(raw.length * 8);
+    for (let i = 0; i < raw.length; i++) for (let b = 0; b < 8; b++) maskBits[i * 8 + b] = (raw.charCodeAt(i) >> (7 - b)) & 1; }
+  const g = cv.getContext("2d"), off = maskBits.length - 180 * 85;
+  g.fillStyle = "#1e3a7a"; g.fillRect(0, 0, 180, 85);
+  g.fillStyle = "#24448a"; for (let x = 0; x < 180; x += 15) g.fillRect(x, 0, 1, 85); for (let y = 5; y < 85; y += 15) g.fillRect(0, y, 180, 1);
+  for (let i = 0; i < 180 * 85; i++) if (maskBits[off + i]) { g.fillStyle = (i / 180 | 0) % 2 ? "#6a9a4a" : "#74a452"; g.fillRect(i % 180, i / 180 | 0, 1, 1); }
+}
+const mapXY = id => ({ x: (CITIES[id].lon + 180) / 2 * 4, y: (80 - CITIES[id].lat) / 2 * 4 });
+/* Place each label near its dot without overlapping other labels or dots; a line joins label and dot. */
+function placeLabels(ids, texts) {
+  const boxes = [], dots = ids.map(mapXY), out = [];
+  const hit = (a, b) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+  ids.forEach((id, i) => {
+    const p = dots[i], w = texts[i].length * 9 + 10, h = 22;
+    let best = null;
+    for (const r of [26, 44, 64, 86]) for (let k = 0; k < 12; k++) {
+      const a = k * Math.PI / 6 - Math.PI / 4, cx = p.x + Math.cos(a) * r, cy = p.y + Math.sin(a) * r;
+      const b = { x: cx - w / 2, y: cy - h / 2, w, h };
+      if (b.x < 2 || b.y < 2 || b.x + w > 718 || b.y + h > 338) continue;
+      if (boxes.some(o => hit(b, o)) || dots.some(d => hit(b, { x: d.x - 12, y: d.y - 12, w: 24, h: 24 }))) continue;
+      best = b; break;
+    }
+    best ||= { x: Math.min(718 - w, Math.max(2, p.x + 14)), y: Math.min(316, Math.max(2, p.y + 14)), w, h };
+    boxes.push(best); out.push({ ...best, px: p.x, py: p.y });
+  });
+  return out;
+}
+
+/* ---------- screens ---------- */
+function menuHTML(items) {
+  return `<ul class="menu">${items.map((it, i) =>
+    `<li><button type="button" id="m${i}" class="${i === sel ? "sel" : ""}" data-i="${i}"><span>${it.label}</span>${it.k ? `<span class="k">${it.k}</span>` : ""}</button></li>`).join("")}</ul>`;
+}
+
+function screenDef() {
+  const c = S && CITIES[S.city];
+  const screen = S ? S.screen : ui || (P.howto ? "howto" : "title");
+  switch (screen) {
+    case "title": {
+      const saved = P.save, r = rankOf();
+      const items = [];
+      if (saved && saved.clues) items.push({ label: "Continue saved game", k: fmtTime(saved.time), go: () => { S = saved; S.screen = "city"; } });
+      items.push({ label: "Start a new case", go: () => { newCase(); } });
+      items.push({ label: "Dossiers", go: () => { S = { screen: "dossiers" }; } });
+      items.push({ label: "Hall of Fame", go: () => { ui = "hof"; } });
+      if (P.dev) items.push({ label: "Vault controls", k: "test", go: () => { ui = "vault"; } });
+      items.push({ label: "How to play", go: () => { P.howto = true; } });
+      items.push({ label: "Switch scout", go: () => { P = null; ui = "login"; } });
+      return {
+        html: `<div class="title-screen tight"><div class="logo"><span class="s">WHERE IN THE WORLD IS</span><span class="l">LIONEL</span><span class="l">MESSI?</span></div>
+          <div class="sub">Scout ${esc(P.name)} · ${r.name} · ${P.solved} case${P.solved === 1 ? "" : "s"} solved${P.caughtCameron && !P.dev ? " · ★ Hall of Fame" : ""}${jailed().length ? ` · ${jailed().length} drafted` : ""}</div><div style="width:420px">`,
+        tail: `</div></div>`, items,
+      };
+    }
+    case "login": {
+      const list = Object.values(PROFILES).filter(p => !p.dev).sort((a, b) => (b.last || 0) - (a.last || 0)).slice(0, 5);
+      return {
+        html: `<div class="title-screen tight"><div class="logo"><span class="s">SCOUT SIGN-IN</span></div>
+          <div class="sub">${list.length ? "Pick your scout, or sign in with a new name." : "Welcome! Type your name to sign in."}</div><div style="width:420px">`,
+        tail: `</div></div>`,
+        items: list.map(p => ({ label: esc(p.name), k: RANKS[p.rank || 0].name, go: () => signIn(p.name) }))
+          .concat([{ label: "Type my name", go: () => { ui = "name"; nameBuf = ""; } }, { label: "Hall of Fame", go: () => { ui = "hof"; } }]),
+      };
+    }
+    case "name": return {
+      noMenu: true, back: () => { ui = "login"; },
+      html: `<div class="view" style="align-items:center"><div class="sub">Type your name with the keyboard, or pick letters below.</div>
+        <div class="namebox">${esc(nameBuf) || "&nbsp;"}<span class="caret">_</span></div>
+        <div class="keys">${KEYS.map((k, i) => `<button type="button" class="key ${i === sel ? "sel" : ""} ${k.length > 1 ? "wide" : ""}" data-i="${i}">${k === " " ? "SPACE" : k}</button>`).join("")}</div>`,
+      tail: `</div>`,
+      items: KEYS.map(k => ({ label: "", go: () => typeKey(k) === "in" ? undefined : "stay" })),
+    };
+    case "vault": {
+      // Test controls for the "entervault" detective: set the rank, and put anyone in or out of jail.
+      const setRank = r => { P.rank = r; P.solved = RANKS[r].at; P.caughtCameron = 0; saveProfile(); return "stay"; };
+      const toggle = id => { P.jailed = jailed().includes(id) ? jailed().filter(x => x !== id) : [...jailed(), id]; saveProfile(); return "stay"; };
+      const items = RANKS.map((r, i) => ({ label: r.name, on: rankIdx() === i, go: () => setRank(i) }))
+        .concat(SUSPECTS.filter(x => x.id !== "messi").map(x => ({ label: x.name, on: jailed().includes(x.id), go: () => toggle(x.id) })))
+        .concat([{ label: "Draft everyone", go: () => { P.jailed = GANG_IDS.slice(); saveProfile(); return "stay"; } },
+          { label: "Undraft everyone", go: () => { P.jailed = []; saveProfile(); return "stay"; } },
+          { label: "Build a case ▸", go: () => { ui = "vcase"; } },
+          { label: "Done", go: () => { ui = null; } }]);
+      const btn = (it, i) => `<button type="button" class="key vkey ${i === sel ? "sel" : ""} ${it.on ? "on" : ""}" data-i="${i}">${it.on ? "✓ " : ""}${esc(it.label)}</button>`;
+      const nR = RANKS.length, nG = GANG_IDS.length;
+      const row = (a, b, cols) => `<div class="vgrid" style="grid-template-columns:repeat(${cols},1fr)">${items.slice(a, b).map((it, i) => btn(it, i + a)).join("")}</div>`;
+      return {
+        noMenu: true, back: () => { ui = null; },
+        html: `<div class="view vault"><div class="place" style="font-size:18px">Vault controls</div>
+          <div class="sub">Rank (sets cases solved to match)</div>${row(0, nR, 5)}
+          <div class="sub">Drafted (✓) · ${freeGang().length} free. ${bossDue() ? "Next case: Messi!" : ""}</div>${row(nR, nR + nG, 4)}${row(nR + nG, items.length, 4)}`,
+        tail: `</div>`, items,
+      };
+    }
+    case "vcase": {
+      // Vault case builder: choose the thief, the trail of cities, and which stop to start at.
+      const V = P.vault ||= { thief: "", trail: [], start: 0 };
+      const ids = ["", ...SUSPECTS.map(x => x.id)], whoName = V.thief ? SUSPECTS.find(x => x.id === V.thief).name : "Random";
+      const trail = V.trail.length >= 2 ? V.trail : null, stops = trail ? trail.length : 0;
+      V.start = Math.min(V.start, Math.max(0, stops - 1));
+      const keep = () => { saveProfile(); return "stay"; };
+      const who = d => () => { V.thief = ids[(ids.indexOf(V.thief) + d + ids.length) % ids.length]; return keep(); };
+      const at = d => () => { if (stops) V.start = (V.start + d + stops) % stops; return keep(); };
+      const city = id => () => { V.trail = V.trail.includes(id) ? V.trail.filter(x => x !== id) : [...V.trail, id]; return keep(); };
+      const begin = () => { newCase(V.thief || undefined, trail); return S; };
+      const play = () => { begin(); const k = trail ? V.start : 0;
+        if (k > 0) { S.cameFrom = S.route[k - 1]; S.city = S.route[k]; S.screen = "city"; } ui = null; };
+      const skip = ok => { begin(); S.cameFrom = S.route[S.route.length - 2]; S.city = S.route[S.route.length - 1]; S.finalVisits = 2;
+        S.warrant = ok ? S.thief : pick(SUSPECTS.filter(x => x.id !== S.thief && x.sex === thief().sex)).id; S.screen = "chase"; ui = null; };
+      const items = [{ label: "◂", go: who(-1) }, { label: `GOAT: ${whoName}`, on: !!V.thief, go: who(1) }, { label: "▸", go: who(1) }]
+        .concat(CITY_IDS.map(id => ({ label: `${V.trail.includes(id) ? V.trail.indexOf(id) + 1 + ". " : ""}${CITIES[id].name}`, on: V.trail.includes(id), go: city(id) })))
+        .concat([{ label: "Random trail", go: () => { V.trail = shuffle(CITY_IDS).slice(0, RANKS[rankIdx()].cities); V.start = 0; return keep(); } },
+          { label: "Clear trail", go: () => { V.trail = []; V.start = 0; return keep(); } },
+          { label: "◂ Back to vault", go: () => { ui = "vault"; } }])
+        .concat([{ label: "◂", go: at(-1) }, { label: trail ? `Start at stop ${V.start + 1}: ${CITIES[trail[V.start]].name}` : "Start at the beginning", go: at(1) }, { label: "▸", go: at(1) }])
+        .concat([{ label: "Play from there", go: play }, { label: "Skip to chase + Draft", go: () => skip(true) }, { label: "Skip, wrong Draft", go: () => skip(false) }]);
+      const btn = (it, i) => `<button type="button" class="key vkey ${i === sel ? "sel" : ""} ${it.on ? "on" : ""}" data-i="${i}">${it.on && !/^\d/.test(it.label) ? "✓ " : ""}${esc(it.label)}</button>`;
+      const row = (a, b, cols) => `<div class="vgrid" style="grid-template-columns:${cols}">${items.slice(a, b).map((it, i) => btn(it, i + a)).join("")}</div>`;
+      const nC = CITY_IDS.length, c0 = 3, u0 = c0 + nC, s0 = u0 + 3, p0 = s0 + 3;
+      return {
+        noMenu: true, back: () => { ui = "vault"; },
+        html: `<div class="view vault"><div class="place" style="font-size:18px">Build a case</div>
+          ${row(0, c0, "48px 1fr 48px")}
+          <div class="sub">Trail: ${trail ? trail.map(id => CITIES[id].name).join(" → ") : V.trail.length ? `${CITIES[V.trail[0]].name} (pick at least 2 cities)` : `tap cities in order, or leave empty for a random ${RANKS[rankIdx()].cities}-city trail`}</div>
+          ${row(c0, u0, "repeat(4,1fr)")}${row(u0, s0, "repeat(3,1fr)")}${row(s0, p0, "48px 1fr 48px")}${row(p0, items.length, "repeat(3,1fr)")}`,
+        tail: `</div>`, items,
+      };
+    }
+    case "vtest": {
+      // In-case test panel for the Vault detective: jump anywhere on the trail, swap the thief, set the warrant, change the clock.
+      const ids = SUSPECTS.map(x => x.id), back = () => { S.screen = S.testFrom || "city"; };
+      const jump = k => () => { S.cameFrom = S.route[k - 1] || null; S.city = S.route[k]; S.finalVisits = 0; S.witness = null; S.screen = "city"; flash = `Jumped to stop ${k + 1}.`; };
+      const swap = d => () => { const keep = { route: S.route, city: S.city, cameFrom: S.cameFrom, time: S.time, notes: S.notes, visited: S.visited, places: S.places, bedtimes: S.bedtimes, testFrom: S.testFrom };
+        newCase(ids[(ids.indexOf(S.thief) + d + ids.length) % ids.length], keep.route); Object.assign(S, keep); S.screen = "vtest"; return "stay"; };
+      const wrongId = () => pick(SUSPECTS.filter(x => x.id !== S.thief && x.sex === thief().sex)).id;
+      const clock = h => () => { S.time = Math.max(START_T, Math.min(DEADLINE_T - 1, S.time + h)); return "stay"; };
+      const items = S.route.map((id, k) => ({ label: `${k + 1}. ${CITIES[id].name}${k === S.route.length - 1 ? " (end)" : ""}`, on: id === S.city, go: jump(k) }))
+        .concat([{ label: "◂", go: swap(-1) }, { label: `GOAT: ${thief().name}`, on: true, go: swap(1) }, { label: "▸", go: swap(1) }])
+        .concat([{ label: "Right Draft", on: S.warrant === S.thief, go: () => { S.warrant = S.thief; return "stay"; } },
+          { label: "Wrong Draft", on: !!S.warrant && S.warrant !== S.thief, go: () => { S.warrant = wrongId(); return "stay"; } },
+          { label: "No Draft", on: !S.warrant, go: () => { S.warrant = null; return "stay"; } }])
+        .concat([{ label: "−1 hour", go: clock(-1) }, { label: "+1 hour", go: clock(1) }, { label: "+1 day", go: clock(24) }, { label: "Mon 9 AM", go: () => { S.time = START_T; return "stay"; } }])
+        .concat([{ label: "Skip to chase", go: () => { S.cameFrom = S.route[S.route.length - 2]; S.city = S.route[S.route.length - 1]; S.finalVisits = 2; S.screen = "chase"; } },
+          { label: "Back to the game", go: back }]);
+      const btn = (it, i) => `<button type="button" class="key vkey ${i === sel ? "sel" : ""} ${it.on ? "on" : ""}" data-i="${i}">${esc(it.label)}</button>`;
+      const row = (a, b, cols) => `<div class="vgrid" style="grid-template-columns:${cols}">${items.slice(a, b).map((it, i) => btn(it, i + a)).join("")}</div>`;
+      const n = S.route.length;
+      return {
+        noMenu: true, back,
+        html: `<div class="view vault"><div class="place" style="font-size:18px">Test controls</div>
+          <div class="sub">In ${CITIES[S.city].name}, stop ${S.route.indexOf(S.city) + 1} of ${n} · ${fmtTime(S.time)}${S.warrant ? ` · Draft: ${esc(SUSPECTS.find(x => x.id === S.warrant).name)}` : ""}</div>
+          <div class="sub">Jump to a stop on the trail</div>${row(0, n, "repeat(3,1fr)")}
+          ${row(n, n + 3, "48px 1fr 48px")}<div class="sub">Draft</div>${row(n + 3, n + 6, "repeat(3,1fr)")}
+          <div class="sub">Clock</div>${row(n + 6, n + 10, "repeat(4,1fr)")}${row(n + 10, items.length, "repeat(2,1fr)")}`,
+        tail: `</div>`, items,
+      };
+    }
+    case "hof": return {
+      back: () => { ui = P ? null : "login"; },
+      html: `<div class="view"><div class="place">Hall of Fame</div><div class="sub">Scouts who found Lionel Messi.</div>
+        <div class="paper hof">${HOF.length ? HOF.slice().reverse().map(h => `<div><b>★ ${esc(h.name)}</b><span>${esc(h.rank)} · ${h.solved} cases · ${h.date}</span></div>`).join("")
+          : "<p>No one has found Lionel Messi yet. Will you be the first?</p>"}</div>`,
+      tail: `</div>`,
+      items: [{ label: "Back", go: () => { ui = P ? null : "login"; } }],
+    };
+    case "howto": return {
+      back: () => { P.howto = false; },
+      html: `<div class="view"><div class="place">How to play</div><div class="paper">
+        A GOAT has slipped away before the big game! Ask around at places in each city. Witnesses give sports clues about where the GOAT went next and what they look like.
+        Work out the city, find it on the map and fly there. When a referee crosses your path, you're on the right trail.
+        Enter what you learn into the Scouting Computer to get a Draft, then catch the GOAT and bring them to the stadium by next Wednesday at 5 PM.</div>`,
+      tail: `</div>`,
+      items: [{ label: "Got it", go: () => { P.howto = false; } }],
+    };
+    case "brief": return {
+      html: `<div class="view"><span class="stampbox">CASE FILE · ${esc(S.rank.toUpperCase())}</span><div class="paper"><span class="who">Chief of ${AGENCY} (${AGENCY_LONG})</span>
+        ${S.boss ? `Scout, this is the big one. Lionel Messi vanished from ${c.name} right before the soccer final! Find him, draft him and bring him to the stadium, and you'll join the Hall of Fame.`
+          : `Scout, this morning in ${c.name}, one of the GOATs slipped away right before the big game! We don't know which one yet.`}
+        Follow the sports clues, get a Draft, and bring the GOAT to the stadium by <b>next Wednesday at 5 PM</b>.</div>`,
+      tail: `</div>`,
+      items: [{ label: `Go to ${c.name}`, go: () => { S.screen = "city"; } }],
+    };
+    case "city": return {
+      art: "city", onShow: S.henchman ? () => { S.henchman = false; playFx("henchman"); } : null,
+      html: `<div class="view"><div class="sub">${S.waited ? "You waited overnight for the morning flight." : S.slept ? "You slept at a hotel and woke at 9 AM." : "What's your next move?"}</div>`,
+      tail: `</div>`,
+      items: [
+        { label: "Investigate", go: () => { S.screen = "inv"; } },
+        { label: "Fly", go: () => { S.screen = "fly"; } },
+        { label: "Scouting Computer", k: S.warrant ? "draft ✓" : "", go: () => { S.screen = "interpol"; } },
+        { label: "Dossiers", go: () => { S.screen = "dossiers"; } },
+        { label: "Case notes", k: `${NOTES_H} hr`, go: () => { if (advance(NOTES_H)) S.screen = "notes"; } },
+        { label: "Hint", k: S.hints && S.hints[S.city] ? "solved" : `${HINT_H} hr`, go: startHint },
+        { label: "Save game", go: () => { goHome(); flash = `Game saved for ${esc(P.name)}.`; } },
+      ],
+    };
+    case "inv": {
+      const v = S.visited[S.city] || [];
+      return {
+        back: () => { S.screen = "city"; }, noMenu: true,
+        html: `<div class="view"><div class="sub">Where do you want to ask around in ${c.name}? Each stop takes 1 to 3 hours.</div><div class="spots">${S.places[S.city].map((t, i) =>
+          `<button type="button" class="spot ${i === sel ? "sel" : ""}" data-i="${i}"><canvas width="120" height="100" data-bldg="${t}"></canvas><span>${PLACE_TYPES[t]}</span><span class="k">${v[i] ? "visited" : "&nbsp;"}</span></button>`).join("")}</div>`,
+        tail: `</div>`,
+        items: S.places[S.city].map((t, i) => ({ label: "", go: () => { S.walkTo = i; S.screen = "walk"; } })),
+      };
+    }
+    case "danger": return {
+      noMenu: true, black: true, html: "", items: [{ label: "", go: endDanger }],
+      onShow: () => playFx(S.witness.danger, endDanger),
+    };
+    case "walk": return {
+      noMenu: true, html: `<canvas class="street" id="street" width="384" height="188"></canvas>`, items: [{ label: "", go: finishWalk }], onShow: startWalk,
+    };
+    case "witness": return {
+      art: "witness", back: () => { S.screen = "inv"; },
+      onShow: () => SFX.mumble(2.6, witnessPerson(S.witness.seed, S.city, S.witness.ptype).sex === "Female"),
+      html: `<div class="view"><div class="paper"><span class="who">Witness at ${esc(S.witness.place)}</span>${esc(S.witness.text)}</div>${S.slept ? `<div class="sub">You slept at a hotel and woke at 9 AM.</div>` : ""}`,
+      tail: `</div>`,
+      items: [{ label: "Continue", go: () => { S.screen = "inv"; } }],
+    };
+    case "unmask": return {
+      art: "witness", noMenu: true, items: [], onShow: startUnmask,
+      html: `<div class="view"><div class="boom-in">IT'S A HATER!</div><div class="sub">A jealous hater was posing as a witness to keep the GOAT away from the game.</div>`, tail: `</div>`,
+    };
+    case "unmasked": return {
+      back: () => { S.screen = "inv"; },
+      html: `<div class="view"><span class="stampbox" style="font-size:24px">IT'S A HATER!</span><div class="paper">The hater ran off, but you got the real story: ${esc(S.witness.better)}</div>`,
+      tail: `</div>`,
+      items: [{ label: "Continue", go: () => { S.screen = "inv"; } }],
+    };
+    case "fly": {
+      const opts = flyOptions(S.city), cur = mapXY(S.city), s = opts[sel] || opts[0];
+      return {
+        back: () => { S.screen = "city"; }, noMenu: true,
+        html: `<div class="view" style="align-items:center;gap:6px"><div class="mapbox"><canvas id="map" width="180" height="85"></canvas>
+          <span class="here" style="left:${cur.x}px;top:${cur.y}px">★</span>
+          ${(() => { const texts = opts.map((id, i) => S.names ? CITIES[id].name : (i === sel ? "?" : "")), L = placeLabels(opts, texts.map(t => t || "?"));
+            return `<svg class="leaders" width="720" height="340">${L.map((l, i) => texts[i] ? `<line x1="${l.px}" y1="${l.py}" x2="${l.x + l.w / 2}" y2="${l.y + l.h / 2}" class="${i === sel ? "on" : ""}"/>` : "").join("")}</svg>` +
+              opts.map((id, i) => { const p = mapXY(id);
+                return (texts[i] ? `<span class="lbl ${i === sel ? "sel" : ""}" style="left:${L[i].x}px;top:${L[i].y}px">${texts[i]}</span>` : "") +
+                  `<button type="button" class="dot ${i === sel ? "sel" : ""}" data-i="${i}" style="left:${p.x}px;top:${p.y}px" aria-label="${S.names ? CITIES[id].name : "Destination " + (i + 1)}"></button>`; }).join(""); })()}
+          </div><div class="sub">★ You are in ${c.name}. ${S.names ? CITIES[s].name : "This city"}${s === S.cameFrom ? " (where you came from)" : ""} is a ${flightHours(S.city, s)} hour flight. Enter to fly.</div>`,
+        tail: `</div>`,
+        items: opts.map(id => ({ label: "", go: () => { S.flyTo = id; S.screen = "flying"; } })),
+        onShow: () => drawMap(document.getElementById("map")),
+      };
+    }
+    case "flying": {
+      const a = mapXY(S.city), b = mapXY(S.flyTo);
+      return {
+        noMenu: true,
+        html: `<div class="view" style="align-items:center;gap:6px"><div class="mapbox"><canvas id="map" width="180" height="85"></canvas>
+          <span class="here" style="left:${a.x}px;top:${a.y}px">★</span><span class="dot sel" style="left:${b.x}px;top:${b.y}px"></span>
+          <span class="jet" id="plane" style="left:${a.x}px;top:${a.y}px">✈</span></div>
+          <div class="sub">Flying from ${c.name} to ${S.names ? CITIES[S.flyTo].name : "the city you picked"}: ${flightHours(S.city, S.flyTo)} hours. Enter to skip.</div>`,
+        tail: `</div>`, items: [], onShow: () => { drawMap(document.getElementById("map")); startFlight(a, b); },
+      };
+    }
+    case "interpol": {
+      const m = S.computed ? SUSPECTS.filter(x => S.computed.includes(x.id)) : roster();
+      return {
+        back: () => { S.screen = "city"; },
+        html: `<div class="interpol"><div class="view"><div class="place" style="font-size:22px">Scouting Computer</div><div class="sub">Select a trait to change it.</div>`,
+        tail: `</div><div class="view">${S.warrant ? `<span class="stampbox">DRAFT: ${esc(SUSPECTS.find(s => s.id === S.warrant).name.toUpperCase())}</span>`
+                : `<div class="sub">${!S.computed ? "Enter traits, then Compute to search the files." : S.stale ? "Traits changed. Compute again to update." : m.length === 0 ? "No one matches. Check your traits." : `${m.length} suspects match. Narrow it to one for a Draft.`}</div>`}
+          <div class="names">${roster().map(s => `<div class="${m.includes(s) ? "" : "out"}">${m.includes(s) ? "▸" : "·"} ${esc(s.name)}</div>`).join("")}</div></div></div>`,
+        items: Object.entries(TRAITS).map(([k, t]) => ({
+          label: t.label, k: S.interpol[k] || "?",
+          go: () => { const vals = [null, ...t.values]; S.interpol[k] = vals[(vals.indexOf(S.interpol[k]) + 1) % vals.length]; S.stale = !!S.computed; return "stay"; },
+        })).concat([{ label: "Compute", k: "1 hr", go: () => {
+          if (!advance(1)) return;
+          SFX.compute();
+          S.computed = matching().map(x => x.id); S.stale = false; updateWarrant();
+          flash = S.warrant ? "Computed. Draft issued!" : `Computed. ${S.computed.length} GOAT${S.computed.length === 1 ? "" : "s"} match.`;
+          return "stay"; } }]),
+      };
+    }
+    case "dossiers": {
+      const D = SUSPECTS, s = D[sel] || D[0], inJail = jailed().includes(s.id);
+      return {
+        art: "dossier", noMenu: true, back: () => { if (S && S.thief) S.screen = "city"; else S = null; },
+        html: `<div class="view"><div class="sub">File ${sel + 1} of ${D.length} · GOAT${jailed().length ? ` · ${jailed().length} drafted` : ""}</div><div class="place" style="font-size:24px">${esc(s.name)}${inJail ? ` <span class="stampbox jailstamp">DRAFTED</span>` : ""}</div>
+          <div class="paper dossier">${Object.entries(TRAITS).map(([k, t]) => `<div><span>${t.label}</span><b>${s[k]}</b></div>`).join("")}<p>${esc(s.bio)}</p></div>
+          <div class="pager"><button type="button" class="back" data-i="${(sel + D.length - 1) % D.length}">◂ Previous</button><button type="button" class="back" data-i="${(sel + 1) % D.length}">Next ▸</button></div>`,
+        tail: `</div>`,
+        items: D.map(() => ({ label: "", go: () => "stay" })),
+      };
+    }
+    case "hint": {
+      const H = S.hint;
+      if (H.done) return {
+        back: () => { S.screen = "city"; },
+        html: `<div class="view"><span class="stampbox" style="font-size:24px">HINT</span>${H.type === "slide" && H.next ? `<canvas class="art puzzle" id="hintpic" width="240" height="147"></canvas>` : ""}<div class="paper">${S.hints[S.city]}</div>`,
+        tail: `</div>`, onShow: () => { const cv = document.getElementById("hintpic"); if (cv) drawLandmark(cv, H.next); },
+        items: [{ label: "Back to the city", go: () => { S.screen = "city"; } }],
+      };
+      if (H.type === "slide") return {
+        back: () => { S.screen = "city"; }, noMenu: true,
+        html: `<div class="view" style="align-items:center"><div class="sub">Slide the tiles back into place to see where the GOAT went. Arrow keys move a tile into the gap.</div>
+          <div class="slide">${H.tiles.map((v, i) => `<button type="button" class="tile ${v === 8 ? "gap" : ""}" data-i="${i}">${v === 8 ? "" : `<canvas width="80" height="49" data-tile="${v}"></canvas>`}</button>`).join("")}</div>`,
+        tail: `</div>`, onShow: drawTiles,
+        items: H.tiles.map((_, i) => ({ label: "", go: () => { slideTile(i); return "stay"; } })),
+      };
+      if (H.type === "scramble") return {
+        back: () => { S.screen = "city"; }, noMenu: true,
+        html: `<div class="view" style="align-items:center"><div class="sub">Unscramble the <b>${H.city ? "city" : "sport"}</b> ${H.city ? "the GOAT is heading to" : "the GOAT's next city loves"} (${H.word.replace(/ /g, "").length} letters${H.word.includes(" ") ? ", two words" : ""}).</div>
+          <div class="namebox">${[...H.word].map((ch, i) => ch === " " ? "&nbsp;&nbsp;" : (H.typed[i] || "_")).join(" ")}</div>
+          <div class="keys">${H.letters.map((ch, i) => `<button type="button" class="key ${i === sel ? "sel" : ""}" data-i="${i}" ${H.used[i] ? "disabled" : ""}>${ch}</button>`).join("")}<button type="button" class="key wide ${sel === H.letters.length ? "sel" : ""}" data-i="${H.letters.length}">UNDO</button></div>`,
+        tail: `</div>`,
+        items: H.letters.map((ch, i) => ({ label: "", go: () => { pickLetter(i); return H.done ? undefined : "stay"; } }))
+          .concat([{ label: "", go: () => { undoLetter(); return "stay"; } }]),
+      };
+      const q = TRIVIA[H.q];
+      return {
+        back: () => { S.screen = "city"; },
+        html: `<div class="view"><span class="stampbox" style="font-size:24px">RIDDLE</span><div class="paper">Answer right and the hint is yours. You get one try.<br><br><b>${esc(q.q)}</b></div>`,
+        tail: `</div>`,
+        items: H.order.map(oi => ({ label: q.opts[oi], go: () => { finishHint(oi === q.a); } })),
+      };
+    }
+    case "notes": return {
+      back: () => { S.screen = "city"; },
+      html: `<div class="view" style="min-height:0;height:100%"><div class="place" style="font-size:22px">Case notes</div><div class="notes" id="notes">${S.notes.length
+        ? S.notes.map(n => `<p><span class="city">${esc(n.city)}, ${esc(n.place)}:</span> ${esc(n.text)}</p>`).join("")
+        : `<p>No clues yet. Investigate to talk to witnesses.</p>`}</div>`,
+      tail: `</div>`,
+      items: [{ label: "Back to the city", go: () => { S.screen = "city"; } }],
+    };
+    case "chase": return {
+      noMenu: true, html: `<canvas class="street" id="street" width="384" height="188"></canvas>`, items: [{ label: "", go: finishChase }], onShow: startChase,
+    };
+    case "end": {
+      const t = thief();
+      const msg = {
+        win: [S.boss ? `HALL OF FAME` : `DRAFTED!`, S.boss ? `The cap comes off. It's Lionel Messi! You brought him to the soccer final and the stadium goes wild${P.dev ? ". (Vault scouts stay out of the Hall of Fame.)" : ". Your name goes into the Hall of Fame!"}` : `The cap comes off. It's ${t.name}, and your Draft names ${t.sex === "Female" ? "her" : "him"}. Off to the stadium for the big game! The crowd goes wild!`],
+        wrong: [`WRONG DRAFT`, `The cap comes off. It's ${t.name}, but your Draft names someone else. ${pron()} jogs away.`],
+        nowarrant: [`NO DRAFT`, `The cap comes off. It's ${t.name}, but you have no Draft. ${pron()} jogs away.`],
+        time: [`OUT OF TIME`, `It's next Wednesday at 5 PM. The big game started without ${t.name}.`],
+      }[S.result];
+      return {
+        art: "thief", onShow: !S.jingled ? () => { S.jingled = true; if (S.result === "win") { SFX.cheer(); SFX.victory(); } else SFX.sad(); } : null,
+        html: `<div class="view"><span class="stampbox" style="font-size:24px">${msg[0]}</span><div class="paper">${msg[1]}</div>
+          ${S.examDue ? `<div class="sub ok">You've earned a shot at promotion to ${RANKS[rankIdx() + 1].name}. Pass the exam to rank up!</div>` : ""}
+          ${S.examDue ? "" : `<div class="sub">The trail: ${S.route.map(r => CITIES[r].name).join(" → ")}.</div>`}`,
+        tail: `</div>`,
+        // If you move on before the jail music ends, Bella's escape shows first so it can't be missed.
+        items: ((S.examDue ? [{ label: "Take the promotion exam", go: startExam }] : [])
+          .concat([{ label: "Start a new case", go: () => { newCase(); } }, { label: "Title screen", go: () => { S = null; } }]))
+          .map(it => ({ ...it, go: () => bellaPending() ? (bellaBreakout(), "stay") : it.go() })),
+      };
+    }
+    case "exam": {
+      const E = S.exam, q = TRIVIA[E.qs[E.i]], next = RANKS[rankIdx() + 1];
+      if (E.done) return {
+        html: `<div class="view"><span class="stampbox" style="font-size:24px">${E.passed ? "PROMOTED" : "NOT YET"}</span><div class="paper">${E.passed
+          ? `Congratulations, ${RANKS[rankIdx()].name}! Your chases will be longer and your clues harder from now on.`
+          : `You got ${E.right} of ${E.qs.length} right. Solve another case to retake the exam for ${next.name}.`}</div>`,
+        tail: `</div>`,
+        items: [{ label: "Start a new case", go: () => { newCase(); } }, { label: "Title screen", go: () => { S = null; } }],
+      };
+      return {
+        html: `<div class="view"><div class="sub">Promotion exam for ${next.name} · Question ${E.i + 1} of ${E.qs.length}</div><div class="paper">${esc(q.q)}</div>
+          ${E.answered != null ? `<div class="sub ${E.answered === q.a ? "ok" : ""}">${E.answered === q.a ? "Correct!" : `Not quite. The answer is ${esc(q.opts[q.a])}.`}</div>` : ""}`,
+        tail: `</div>`,
+        items: E.answered != null
+          ? [{ label: E.i + 1 < E.qs.length ? "Next question" : "See your result", go: () => {
+              E.i++; E.answered = null; E.order = shuffle([0, 1, 2, 3]);
+              if (E.i >= E.qs.length) { E.done = true; E.passed = E.right === E.qs.length; if (E.passed) { P.rank = rankIdx() + 1; saveProfile(); SFX.victory(); } else SFX.sad(); }
+            } }]
+          : E.order.map(oi => ({ label: q.opts[oi], go: () => { E.answered = oi; if (oi === q.a) { E.right++; SFX.compute(); } else SFX.sad(); } })),
+      };
+    }
+  }
+}
+
+/* Hints: after visiting all three places in a city, solve a puzzle (2 hours) to learn about the thief's next stop.
+   The puzzle rotates between a slide puzzle, a word scramble and a sports riddle. */
+const HINT_H = 2;
+/* The sport each city is famous for: the scramble word at Head Scout and up, and the hater's ticket stub. */
+const FAME = { paris: "CYCLING", tokyo: "SUMO", cairo: "SQUASH", rio: "CAPOEIRA", mumbai: "CRICKET", sydney: "SURFING",
+  reykjavik: "HANDBALL", mexico: "LUCHA LIBRE", istanbul: "VOLLEYBALL", nairobi: "RUNNING", london: "TENNIS", newyork: "BASEBALL",
+  beijing: "TABLE TENNIS", buenosaires: "POLO", rome: "CHARIOT RACING", bangkok: "MUAY THAI" };
+const FAME_LONG = { paris: "the Tour de France finish", tokyo: "its sumo tournaments", cairo: "its squash champions", rio: "beach volleyball and capoeira",
+  mumbai: "cricket", sydney: "surfing and the Sydney to Hobart yacht race", reykjavik: "handball and strongmen", mexico: "lucha libre wrestling",
+  istanbul: "its Intercontinental Derby", nairobi: "long-distance runners", london: "Wimbledon", newyork: "the Yankees",
+  beijing: "table tennis", buenosaires: "the Superclásico", rome: "the old chariot races", bangkok: "Muay Thai" };
+const CONTINENT = { paris: "EUROPE", tokyo: "ASIA", cairo: "AFRICA", rio: "SOUTH AMERICA", mumbai: "ASIA", sydney: "AUSTRALIA",
+  reykjavik: "EUROPE", mexico: "NORTH AMERICA", istanbul: "EUROPE", nairobi: "AFRICA", london: "EUROPE", newyork: "NORTH AMERICA",
+  beijing: "ASIA", buenosaires: "SOUTH AMERICA", rome: "EUROPE", bangkok: "ASIA" };
+function nextStop() { const i = S.route.indexOf(S.city); return i >= 0 && i < S.route.length - 1 ? S.route[i + 1] : null; }
+function hintText(type) {
+  const i = S.route.indexOf(S.city), next = nextStop();
+  if (i === -1) return `The trail went cold. The GOAT never came to ${CITIES[S.city].name}. Head back to where you last had a lead.`;
+  if (!next) return `The GOAT hasn't left! ${pron()} is hiding somewhere in ${CITIES[S.city].name}.`;
+  const B = CITIES[next];
+  if (type === "slide") return `The GOAT's next stop has this landmark.`;
+  if (type === "scramble") return S.hint && S.hint.city ? `The GOAT is headed to ${B.name}!` : `The GOAT is headed to a city that loves ${FAME[next].toLowerCase()}.`;
+  return `The GOAT is headed to a city famous for ${FAME_LONG[next]}.`;
+}
+function startHint() {
+  S.hints ||= {};
+  if (S.hints[S.city]) { S.hint = { done: true, type: S.hintType?.[S.city], next: nextStop() }; S.screen = "hint"; return; }
+  const v = S.visited[S.city] || [];
+  if (!v.every(Boolean) || v.length < 3) { flash = "Visit all three places here first."; return "stay"; }
+  const types = ["slide", "scramble", "riddle"], type = types[(S.hintN = (S.hintN || 0) + 1) % 3];
+  const next = nextStop();
+  const H = S.hint = { type: type === "slide" && !next ? "riddle" : type, next, done: false };
+  if (H.type === "slide") {
+    H.tiles = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+    for (let k = 0, last = -1; k < 60; k++) { const gap = H.tiles.indexOf(8), nb = neighbors(gap).filter(n => n !== last); const n = pick(nb); last = gap; [H.tiles[gap], H.tiles[n]] = [H.tiles[n], H.tiles[gap]]; }
+    if (H.tiles.every((v, i) => v === i)) [H.tiles[0], H.tiles[1]] = [H.tiles[1], H.tiles[0]];
+  } else if (H.type === "scramble") {
+    H.city = !!next && rankIdx() < 2; H.word = H.city ? CITIES[next].name.toUpperCase().replace(/[^A-Z ]/g, "") : FAME[next || S.city]; H.letters = shuffle([...H.word.replace(/ /g, "")]); H.used = H.letters.map(() => false); H.typed = []; H.picks = [];
+  } else { H.q = rint(0, TRIVIA.length - 1); H.order = shuffle([0, 1, 2, 3]); }
+  S.screen = "hint";
+}
+const neighbors = i => [i - 3, i + 3, i % 3 ? i - 1 : -1, i % 3 < 2 ? i + 1 : -1].filter(n => n >= 0 && n < 9);
+function slideTile(i) {
+  const H = S.hint, gap = H.tiles.indexOf(8);
+  if (!neighbors(gap).includes(i)) return;
+  [H.tiles[gap], H.tiles[i]] = [H.tiles[i], H.tiles[gap]]; SFX.step(true);
+  if (H.tiles.every((v, k) => v === k)) finishHint(true);
+}
+function slideKey(key) {   // arrow moves the tile on that side of the gap into the gap
+  const gap = S.hint.tiles.indexOf(8), d = { ArrowLeft: 1, ArrowRight: -1, ArrowUp: 3, ArrowDown: -3 }[key], from = gap + d;
+  if ((d === 1 && gap % 3 === 2) || (d === -1 && gap % 3 === 0) || from < 0 || from > 8) return;
+  slideTile(from);
+}
+function drawTiles() {
+  const src = document.createElement("canvas"); src.width = 240; src.height = 147; drawLandmark(src, S.hint.next);
+  document.querySelectorAll("[data-tile]").forEach(cv => { const v = +cv.dataset.tile, g = cv.getContext("2d");
+    g.drawImage(src, (v % 3) * 80, Math.floor(v / 3) * 49, 80, 49, 0, 0, 80, 49); });
+}
+function pickLetter(i) {
+  const H = S.hint; if (H.used[i]) return;
+  let pos = H.typed.length; while (H.word[pos] === " ") H.typed[pos++] = " ";
+  H.typed[pos] = H.letters[i]; H.used[i] = true; H.picks.push(i); SFX.click();
+  const filled = H.typed.join("");
+  if (filled.length === H.word.length) { if (filled === H.word) finishHint(true); else { SFX.sad(); flash = "Not quite. Try again!"; H.typed = []; H.picks = []; H.used = H.used.map(() => false); } }
+}
+function undoLetter() { const H = S.hint, i = H.picks.pop(); if (i == null) return; H.used[i] = false; H.typed.pop(); while (H.typed[H.typed.length - 1] === " ") H.typed.pop(); }
+function finishHint(ok) {
+  const H = S.hint;
+  if (!advance(HINT_H)) return;
+  H.done = true; sel = 0;
+  (S.hintType ||= {})[S.city] = H.type;
+  if (ok) { SFX.compute(); S.hints[S.city] = hintText(H.type); S.notes.push({ city: CITIES[S.city].name, place: "Hint", text: S.hints[S.city] }); }
+  else { SFX.sad(); S.hints[S.city] = null; flash = "Wrong answer, so no hint this time."; S.screen = "city"; }
+}
+
+/* On-screen keyboard for signing in with handheld buttons. */
+const KEYS = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", " ", "DEL", "OK"];
+function typeKey(k) {
+  if (k === "DEL") nameBuf = nameBuf.slice(0, -1);
+  else if (k === "OK") { if (nameBuf.trim()) { signIn(nameBuf); return "in"; } }
+  else if (nameBuf.length < 14) nameBuf += nameBuf.length && nameBuf[nameBuf.length - 1] !== " " ? k.toLowerCase() : k;
+}
+
+/* Promotion exam: 1 question for Scout, 2 for Head Scout, 3 for Talent Hunter, 4 for Ace Scout. */
+function startExam() {
+  const n = rankIdx() + 1;
+  S.examDue = false;
+  S.exam = { qs: shuffle([...TRIVIA.keys()]).slice(0, n), i: 0, right: 0, answered: null, done: false, order: shuffle([0, 1, 2, 3]) };
+  S.screen = "exam";
+}
+
+let current = null, anim = null;
+function stopAnim() { if (anim) { cancelAnimationFrame(anim.raf); clearInterval(anim.iv); clearTimeout(anim.to); anim = null; } document.querySelectorAll(".fx,.boom").forEach(e => e.remove()); }
+
+function render() {
+  stopAnim();
+  const d = screenDef(); current = d;
+  if (sel >= d.items.length) sel = Math.max(0, d.items.length - 1);
+  const c = S && CITIES[S.city];
+  const bar = !S || !S.thief
+    ? `<div class="bar"><span class="brand">${AGENCY}</span><span class="clock">${P ? `${esc(P.name)} · ${rankOf().name}` : "Sign in"}</span></div>`
+    : `<div class="bar"><span class="brand">${esc(S.rank.toUpperCase())} · ${c.name.toUpperCase()}</span><span class="clock">${fmtTime(S.time)} · <b>due next Wed 5 PM</b></span></div>`;
+  let left = "", cls = "";
+  if (d.art === "city") { cls = "art-city"; left = `<div class="view"><canvas class="art" id="art" width="240" height="147"></canvas><div class="place">${c.name}</div></div>`; }
+  if (d.art) if (d.art !== "city") { cls = "art-face"; left = `<div class="view"><canvas class="face" id="face" width="96" height="96"></canvas></div>`; }
+  const msg = flash ? `<div class="sub ok">${flash}</div>` : ""; flash = "";
+  document.getElementById("stage").innerHTML = bar +
+    `<div class="body ${cls}${d.black ? " black" : ""}">${left}${d.html}${d.noMenu ? "" : menuHTML(d.items)}${msg}${d.tail || ""}</div>` +
+    `<div class="foot"><span>${S && S.screen === "fly" ? "↑↓ pick a city · Enter fly" : S && S.screen === "dossiers" ? "←→ flip through the files" : S && S.screen === "witness" ? "Enter continue · E spot a disguise" : "↑↓ choose · Enter select"}${d.back ? " · Esc back" : ""}</span><span class="foot-r">${canTest() ? `<button type="button" class="back" id="testbtn">Test (T)</button>` : ""}${canHome() ? `<button type="button" class="back" id="homebtn">⌂ Home (H)</button>` : ""}<button type="button" class="back" id="mutebtn">${P && P.mute ? "Sound off" : "Sound on"} (M)</button>${d.back ? `<button type="button" class="back" id="backbtn">◂ Back</button>` : ""}</span></div>`;
+  if (d.art === "city") drawLandmark(document.getElementById("art"), S.city);
+  if (d.art === "witness" && S.screen === "witness") { const fc = document.getElementById("face");
+    const wp = witnessPerson(S.witness.seed, S.city, S.witness.ptype);
+    talkingFace(fc, wp, S.witness.bella);
+    // Pointing at the eyes or the hat/hair accuses the witness of being in disguise.
+    const spot = e => { const r = fc.getBoundingClientRect(), x = (e.clientX - r.left) * 96 / r.width, y = (e.clientY - r.top) * 96 / r.height, B = drawFace.boxes(wp);
+      return y < Math.min(B.eyeL[1], B.eyeR[1]) || [B.eyeL, B.eyeR].some(b => x >= b[0] - 4 && x <= b[2] + 4 && y >= b[1] - 4 && y <= b[3] + 4); };
+    fc.addEventListener("mousemove", e => { fc.style.cursor = spot(e) ? "pointer" : ""; });
+    fc.addEventListener("click", e => { if (spot(e)) { SFX.click(); accuseWitness(); sel = 0; render(); } }); }
+  if (d.art === "witness" && S.screen === "unmask") drawFace(document.getElementById("face"), witnessPerson(S.witness.seed, S.city, S.witness.ptype));
+  if (d.art === "thief") { const fc = document.getElementById("face"); drawFace(fc, facePerson(thief()));
+    if (S.result === "win" && !S.escaped) drawBars(fc); }
+  if (d.art === "dossier") { const s = SUSPECTS[sel] || SUSPECTS[0], fc = document.getElementById("face"); drawFace(fc, facePerson(s)); if (jailed().includes(s.id)) drawBars(fc); }
+  document.querySelectorAll("[data-bldg]").forEach(cv => drawBuilding(cv, cv.dataset.bldg));
+  // Screens with more buttons than fit scroll; keep the highlighted one in view.
+  const on = document.querySelector(".menu .sel, .key.sel"); if (on) on.scrollIntoView({ block: "nearest" });
+  if (d.onShow) d.onShow();
+}
+
+function witnessPerson(seed, cityId, job) {
+  const r = seeded(seed), reg = REGIONS[REGION_OF[cityId]];
+  const age = ["young", "adult", "adult", "adult", "old"][Math.floor(r() * 5)];
+  return { seed, sex: r() < 0.5 ? "Female" : "Male", hair: reg.hair[Math.floor(r() * reg.hair.length)],
+    skin: SKIN[reg.skin[Math.floor(r() * reg.skin.length)]], age, job, feature: null, style: "witness" };
+}
+// Bella's eyes dart left, right, left, back, then pause, over and over.
+const SHIFTY = [-1, -1, -1, 1, 1, 1, -1, -1, 0, 0, 0, 0, 0, 0, 1, 1, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0];
+/* Vault detective only: open the test panel from any point in a case. */
+const canTest = () => P && P.dev && S && S.thief && S.route && !S.result && !S.exam && S.screen !== "vtest";
+function openTest() { S.testFrom = ["chase", "walk", "danger", "unmask", "hint", "flying"].includes(S.screen) ? "city" : S.screen; S.screen = "vtest"; sel = 0; render(); }
+function talkingFace(cv, person, shifty) {
+  const t0 = performance.now(), reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  drawFace(cv, person);
+  if (reduce && !shifty) return;
+  anim = { iv: setInterval(() => {
+    const t = performance.now() - t0;
+    drawFace(cv, person, { talk: t < 2600 && Math.floor(t / 140) % 2 === 0, blink: !shifty && t % 3200 > 3050,
+      look: shifty ? SHIFTY[Math.floor(t / 140) % SHIFTY.length] : null });
+  }, 70) };
+}
+/* Hater unmasked: the witness disguise is thrown off, the hater's real face shows, and they run off the screen. */
+const HATER = { id: "hater", name: "Hater", sex: "Male", hair: "Black", hobby: "Soccer", feature: "Cap", vehicle: "Motorcycle", skin: "#d9a47c" };
+function startUnmask() {
+  const cv = document.getElementById("face"), w = S.witness, wp = witnessPerson(w.seed, S.city, w.ptype), bella = facePerson(HATER);
+  const t0 = performance.now(); let popped = false, ran = false;
+  const mask = document.createElement("canvas"); mask.width = mask.height = 96; drawFace(mask, wp); cutOut(mask);
+  const g = cv.getContext("2d"); g.imageSmoothingEnabled = false; cv.style.transition = "none";
+  const step = now => {
+    const t = now - t0;
+    if (t < 800) { const k = t / 800; drawFace(cv, bella);
+      if (!popped) { popped = true; SFX.pop(); }
+      g.save(); g.translate(48 + k * 40, 48 - k * k * 150); g.rotate(k * 3); g.drawImage(mask, -48, -48); g.restore(); }
+    else if (t < 1900) { drawFace(cv, bella, { talk: Math.floor(t / 120) % 2 === 0 }); }
+    else { if (!ran) { ran = true; for (let k = 0; k < 4; k++) setTimeout(() => SFX.step(), k * 110); }
+      drawFace(cv, bella); cv.style.transform = `translateX(${-Math.min(1, (t - 1900) / 500) * 420}px)`; }
+    if (t < 2500) anim.raf = requestAnimationFrame(step); else { S.screen = "unmasked"; sel = 0; render(); }
+  };
+  anim = { raf: requestAnimationFrame(step) };
+}
+/* Erase a portrait's backdrop (flood fill from the edges over the backdrop colours) so only the person is left. */
+function cutOut(cv) {
+  const g = cv.getContext("2d"), im = g.getImageData(0, 0, 96, 96), d = im.data, key = i => d[i * 4] << 16 | d[i * 4 + 1] << 8 | d[i * 4 + 2];
+  const bg = new Set(), seen = new Uint8Array(96 * 96), q = [];
+  for (let k = 0; k < 96; k++) for (const i of k < 40 ? [k, k * 96, k * 96 + 95] : [k]) { bg.add(key(i)); q.push(i); }
+  while (q.length) { const i = q.pop(); if (seen[i] || !bg.has(key(i))) continue; seen[i] = 1; d[i * 4 + 3] = 0;
+    const x = i % 96; if (x > 0) q.push(i - 1); if (x < 95) q.push(i + 1); if (i >= 96) q.push(i - 96); if (i < 96 * 95) q.push(i + 96); }
+  g.putImageData(im, 0, 0);
+}
+function accuseWitness() {
+  const w = S.witness;
+  if (w.bella) {
+    const n = S.notes.findIndex(x => x.text === w.text);
+    const i = S.route.indexOf(S.city), next = S.route[i + 1], A = CITIES[S.city], B = CITIES[next];
+    let dl = B.lon - A.lon; if (dl > 180) dl -= 360; if (dl < -180) dl += 360;
+    w.better = `${w.real} And the hater dropped a ticket stub as they ran: ${rankIdx() < 2 ? `a flight to ${B.name}` : `a ticket to watch ${FAME[next].toLowerCase()}`}.`;
+    if (n >= 0) S.notes[n] = { city: A.name, place: "Hater (unmasked)", text: w.better };
+    else S.notes.push({ city: A.name, place: "Hater (unmasked)", text: w.better });
+    w.bella = false; S.screen = "unmask";
+  } else if (!w.checked) {
+    if (!advance(1)) return;
+    w.checked = true; flash = "No disguise. Just an honest witness. That took an hour.";
+  }
+}
+
+
+function choose(i) {
+  const it = current.items[i]; if (!it) return;
+  SFX.click();
+  const r = it.go();
+  sel = r === "stay" ? i : 0;
+  render();
+}
+/* Home: save the case in progress (if any) and return to the title screen. */
+const canHome = () => P && S && S.screen !== "exam";
+const bellaPending = () => S && S.screen === "end" && S.bellaEscapes && !S.escaped;
+function bellaBreakout() { S.escaped = true; SFX.pop(); }
+function goHome() {
+  if (!canHome()) return;
+  if (bellaPending()) { bellaBreakout(); return; }
+  if (S.thief && !S.result) { P.save = JSON.parse(JSON.stringify(S)); saveProfile(); flash = `Game saved for ${esc(P.name)}.`; }
+  stopAnim(); S = null; ui = null; sel = 0;
+}
+function goBack() { if (current.back) { current.back(); sel = 0; render(); } }
+
+document.getElementById("stage").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.id === "backbtn") return goBack();
+  if (b.id === "homebtn") { goHome(); render(); return; }
+  if (b.id === "testbtn") { openTest(); return; }
+  if (b.id === "mutebtn" && P) { SFX.muted = P.mute = !P.mute; saveProfile(); render(); return; }
+  if (b.dataset.i != null) { if (S && S.screen === "dossiers") { sel = +b.dataset.i; render(); } else choose(+b.dataset.i); }
+});
+document.addEventListener("keydown", e => {
+  if (!current) return;
+  const n = current.items.length, scr = S ? S.screen : ui;
+  if (scr === "name") {
+    if (/^[a-zA-Z ]$/.test(e.key)) { e.preventDefault(); typeKey(e.key === " " ? " " : e.key.toUpperCase()); render(); return; }
+    if (e.key === "Backspace") { e.preventDefault(); typeKey("DEL"); render(); return; }
+    if (e.key === "Enter" && nameBuf && sel < 26) { e.preventDefault(); if (typeKey("OK")) sel = 0; render(); return; }
+    const mv = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[e.key];
+    if (mv) { e.preventDefault(); sel = Math.max(0, Math.min(KEYS.length - 1, sel + mv)); render(); return; }
+  }
+  if (scr === "hint" && S.hint.type === "slide" && !S.hint.done && /^Arrow/.test(e.key)) { e.preventDefault(); slideKey(e.key); render(); return; }
+  const notes = document.getElementById("notes");
+  if (scr === "flying" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); land(); return; }
+  if (scr === "chase" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); finishChase(); return; }
+  if (scr === "walk" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); finishWalk(); return; }
+  if (scr === "danger" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); endDanger(); return; }
+  if ((e.key === "h" || e.key === "H") && canHome()) { goHome(); render(); return; }
+  if ((e.key === "t" || e.key === "T") && canTest()) { openTest(); return; }
+  if ((e.key === "e" || e.key === "E") && S && S.screen === "witness") { SFX.click(); accuseWitness(); sel = 0; render(); return; }
+  if ((e.key === "m" || e.key === "M") && P) { SFX.muted = P.mute = !P.mute; saveProfile(); render(); return; }
+  if (notes && (e.key === "ArrowDown" || e.key === "ArrowUp")) { e.preventDefault(); notes.scrollTop += e.key === "ArrowDown" ? 60 : -60; return; }
+  const side = scr === "fly" || scr === "inv" || scr === "dossiers" || (scr === "hint" && S.hint.type === "scramble" && !S.hint.done);
+  const down = e.key === "ArrowDown" || (side && e.key === "ArrowRight");
+  const up = e.key === "ArrowUp" || (side && e.key === "ArrowLeft");
+  if (down) { e.preventDefault(); sel = (sel + 1) % Math.max(n, 1); render(); }
+  else if (up) { e.preventDefault(); sel = (sel - 1 + n) % Math.max(n, 1); render(); }
+  else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(sel); }
+  else if (e.key === "Escape" || e.key === "Backspace") { e.preventDefault(); goBack(); }
+});
+
+/* ---------- flights: no red-eyes, so a flight that would land after bedtime waits for 9 AM ---------- */
+function startFlight(a, b) {
+  SFX.fly(2.3);
+  const plane = document.getElementById("plane"), t0 = performance.now(), dur = 2200;
+  const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+  plane.style.transform = `translate(-50%,-50%) rotate(${ang}deg)`;
+  const step = now => {
+    const k = Math.min(1, (now - t0) / dur), e = k * k * (3 - 2 * k);
+    plane.style.left = a.x + (b.x - a.x) * e + "px"; plane.style.top = a.y + (b.y - a.y) * e - Math.sin(k * Math.PI) * 30 + "px";
+    if (k < 1) anim.raf = requestAnimationFrame(step); else land();
+  };
+  anim = { raf: requestAnimationFrame(step) };
+}
+function land() {
+  if (!S || S.screen !== "flying") return;
+  const hrs = flightHours(S.city, S.flyTo), day = Math.floor(S.time / 24);
+  S.waited = false;
+  if (S.time + hrs > day * 24 + S.bedtimes[day]) { S.time = (day + 1) * 24 + 9; S.waited = true; }
+  S.cameFrom = S.city; S.city = S.flyTo; S.flyTo = null;
+  S.places[S.city] = rollPlaces(S.city); S.visited[S.city] = [false, false, false];
+  const ok = advance(hrs);
+  if (S.waited) S.slept = false;
+  if (ok) { S.screen = "city"; S.henchman = S.route.indexOf(S.city) > 0; }
+  sel = 0; render();
+}
+
+/* ---------- overlay animations: the referee (old knife and gunshot scenes are no longer used) ---------- */
+/* A pixel revolver pointing left, muzzle at (x, y); kick tilts it up (radians) for the recoil. */
+function drawGun(g, x, y, kick) {
+  g.save(); g.translate(x + 100, y + 30); g.rotate(kick); g.translate(-x - 100, -y - 30);
+  const { R } = kit(g), o = (dx, dy, w, h, c) => R(x + dx, y + dy, w, h, c);
+  o(-2, -6, 60, 12, INK); o(0, -4, 56, 8, "#5a5e6e"); o(0, -4, 56, 2, "#9aa0b4");   // barrel
+  o(2, -10, 6, 4, INK);                                                            // front sight
+  o(54, -14, 30, 30, INK); o(56, -12, 26, 26, "#6a6e80"); o(56, -12, 26, 3, "#a8aec2");
+  for (const yy of [-4, 4]) o(56, yy, 26, 2, "#4a4e5e");                           // cylinder grooves
+  o(82, -12, 22, 30, INK); o(84, -10, 18, 26, "#5a5e6e");                          // frame
+  o(96, -20, 10, 10, INK); o(98, -18, 6, 8, "#4a4e5e");                            // hammer
+  o(62, 16, 22, 14, INK); o(66, 16, 14, 10, "#000");  o(72, 14, 4, 10, "#4a4e5e"); // trigger guard + trigger
+  g.fillStyle = INK; g.beginPath(); g.moveTo(x + 86, y + 14); g.lineTo(x + 110, y + 12); g.lineTo(x + 128, y + 62); g.lineTo(x + 98, y + 66); g.closePath(); g.fill();
+  g.fillStyle = "#7a4a26"; g.beginPath(); g.moveTo(x + 89, y + 17); g.lineTo(x + 107, y + 15); g.lineTo(x + 123, y + 59); g.lineTo(x + 100, y + 62); g.closePath(); g.fill();
+  g.fillStyle = "#9a6232"; for (let k = 0; k < 4; k++) R(x + 98 + k * 4, y + 28 + k * 8, 6, 2, "#9a6232");     // wood grain
+  g.restore();
+}
+function playFx(kind, done) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches && kind === "henchman") return;
+  const stage = document.getElementById("stage");
+  const cv = document.createElement("canvas"); cv.className = "fx"; cv.width = 400; cv.height = 240; stage.appendChild(cv);
+  const g = cv.getContext("2d"), { R } = kit(g), t0 = performance.now();
+  const boom = (txt, x, y, small) => { const b = document.createElement("div"); b.className = "boom" + (small ? " small" : ""); b.innerHTML = txt; b.style.left = x + "px"; b.style.top = y + "px"; stage.appendChild(b); };
+  const style = pick(["peek", "scoot", "tiptoe"]);
+  let said = false;
+  if (kind === "henchman") SFX.henchman(); else if (kind === "knife") SFX.knife();
+  const step = now => {
+    const t = now - t0; let going = true;
+    if (kind === "henchman") {
+      going = henchmanScene(g, t, style);
+      if (!said && t > 700) { said = true; boom(`REFEREE<br>SPOTTED!`, 24, 380, true); }
+    } else {
+      g.clearRect(0, 0, 400, 240); going = t < 2200;
+      if (kind === "knife") {
+        const x = Math.max(120, 400 - t / 1.1), wob = x === 120 ? Math.round(Math.sin(t / 30) * 2 * Math.max(0, 1 - (t - 300) / 600)) : 0;
+        R(x, 92 + wob, 20, 4, "#c0c8d8"); R(x, 92 + wob, 20, 1, "#ffffff"); R(x + 20, 89 + wob, 3, 10, INK); R(x + 23, 92 + wob, 14, 4, "#6b4226"); R(x + 23, 93 + wob, 14, 1, "#8a5a32");
+        if (x === 120 && !said) { said = true; boom("THUNK!", 150, 130); }
+      } else {
+        // The gun creeps in from the right, pauses, fires, and kicks back with the recoil.
+        const FIRE = 1700, creep = Math.min(1, t / 1500), ease = 1 - Math.pow(1 - creep, 2);
+        const since = t - FIRE, kick = since < 0 ? 0 : since < 90 ? since / 90 : Math.max(0, 1 - (since - 90) / 450);
+        const x = Math.round(410 - ease * 170 + kick * 22), y = 110 + Math.round(Math.sin(t / 260) * (since < 0 ? 2 : 0));
+        drawGun(g, x, y, kick * 0.35);
+        if (since >= 0 && since < 110) {     // muzzle flash
+          const mx = x - 6, my = y - Math.round(Math.sin(kick) * 100);
+          g.fillStyle = "#fff6c8"; g.beginPath(); for (let k = 0; k < 16; k++) { const r = k % 2 ? 10 : 26, a = k / 16 * Math.PI * 2; g.lineTo(mx + Math.cos(a) * r, my + Math.sin(a) * r); } g.fill();
+          g.fillStyle = "#f7d046"; g.beginPath(); g.arc(mx, my, 9, 0, 7); g.fill();
+        }
+        if (since > 60) for (let k = 0; k < 4; k++) {   // smoke puffs drifting up
+          const u = (since - 60) / 1000, r = 4 + u * 10 + k * 2;
+          g.fillStyle = `rgba(200,200,210,${Math.max(0, 0.55 - u * 0.5 - k * 0.08)})`;
+          g.beginPath(); g.arc(x - 10 - k * 9 - u * 20, y - 6 - u * 40 - k * 6, r, 0, 7); g.fill();
+        }
+        if (!said && since >= 0) { said = true; SFX.gun(); boom("BANG! A shot just missed you!", 40, 60); }
+        going = t < 3300;
+      }
+    }
+    if (going) anim.raf = requestAnimationFrame(step);
+    else if (kind === "henchman") { cv.remove(); document.querySelectorAll(".boom").forEach(e => e.remove()); }
+    else if (done) anim.to = setTimeout(done, 500);
+  };
+  anim = anim || {};
+  anim.raf = requestAnimationFrame(step);
+}
+
+/* ---------- the chase: the GOAT in their jersey, the scout in pursuit, cap comes off ---------- */
+function startChase() {
+  const cv = document.getElementById("street"), g = cv.getContext("2d"), t0 = performance.now();
+  const th = thief(), sd = hash(S.city), FEET = 146, right = S.warrant === S.thief;
+  const fc = document.createElement("canvas"); fc.width = fc.height = 96; const who = facePerson(th);
+  const RUN = 3000, HOLD = 1300, LIFT = 800, SHOW = right ? 2200 : 1300, BACK = 4200;
+  const T2 = RUN, T3 = T2 + HOLD + LIFT + SHOW, TEND = right ? T3 : T3 + BACK;
+  const stage = document.getElementById("stage"), b = document.createElement("div");
+  b.className = "boom"; b.style.left = "40px"; b.style.top = "70px"; b.style.fontSize = "28px"; stage.appendChild(b);
+  const say = txt => { if (b.textContent !== txt) b.textContent = txt; };
+  let lastStep = -1, popped = false, scored = false;
+  g.imageSmoothingEnabled = false;
+  const step = now => {
+    const t = now - t0;
+    if (t < T2) {                       // 1. both run all the way across the street
+      say("There goes the GOAT!");
+      drawStreet(g, sd);
+      const k = t / RUN, f = Math.floor(t / 90);
+      drawSuspect(g, Math.round(-30 + k * 470), FEET, f, { hat: true, hair: HAIR[th.hair], skin: th.skin, run: true, kit: (window.GOAT_KIT || {})[th.id] });
+      drawDetective(g, Math.round(-110 + k * 480), FEET, f, { run: true });
+      const st = Math.floor(t / 150); if (st !== lastStep) { lastStep = st; SFX.step(); }
+    } else if (t < T3) {                // 2. close-up: just the hat on black, then it comes off
+      const u = t - T2, lift = Math.max(0, Math.min(1, (u - HOLD) / LIFT));
+      say(lift < 1 ? "Gotcha! Off comes the cap..." : right ? `It's ${th.name}! Your Draft is good!` : S.warrant ? `It's ${th.name}... wrong Draft!` : `It's ${th.name}... but no Draft!`);
+      if (lift > 0 && !popped) { popped = true; SFX.pop(); }
+      if (lift >= 1 && !scored) { scored = true; if (!right) { S.jingled = true; SFX.sad(); } }
+      drawFace(fc, who, { mystery: true, hatLift: lift });
+      g.fillStyle = "#000"; g.fillRect(0, 0, 384, 188); g.drawImage(fc, 98, 0, 188, 188);
+    } else {                            // 3. wrong: the detective shuffles back across, slumped
+      const u = t - T3, k = Math.min(1, u / BACK);
+      if (!S.sadWalked) { S.sadWalked = true; SFX.sadWalk(); }
+      say(`${th.name} walks away...`);
+      drawStreet(g, sd);
+      drawDetective(g, Math.round(420 - k * 480), FEET, Math.floor(u / 220), { slump: true, flip: true });
+      const st = Math.floor(u / 440); if (st !== lastStep) { lastStep = st; SFX.step(true); }
+    }
+    if (t < TEND) anim.raf = requestAnimationFrame(step); else finishChase();
+  };
+  anim = { raf: requestAnimationFrame(step) };
+}
+function startWalk() {
+  const cv = document.getElementById("street"), g = cv.getContext("2d"), t0 = performance.now();
+  const bg = document.createElement("canvas"); bg.width = 384; bg.height = 188;
+  const path = drawApproach(bg, S.places[S.city][S.walkTo]), pts = path.pts;
+  const man = document.createElement("canvas"); man.width = 64; man.height = 72; const mg = man.getContext("2d");
+  // Distance along the path, so he walks at a steady pace.
+  const segs = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1])), total = segs.reduce((a, b) => a + b, 0) || 1;
+  const WALK = 2200;
+  g.imageSmoothingEnabled = false;
+  let lastStep = -1;
+  const step = now => {
+    const t = now - t0, done = t >= WALK;
+    let d = Math.min(1, t / WALK) * total, i = 0;
+    while (i < segs.length - 1 && d > segs[i]) d -= segs[i++];
+    const k = segs[i] ? Math.min(1, d / segs[i]) : 1, A = pts[i], B = pts[i + 1] || A;
+    const x = A[0] + (B[0] - A[0]) * k, y = A[1] + (B[1] - A[1]) * k, sc = A[2] + (B[2] - A[2]) * k;
+    g.drawImage(bg, 0, 0);
+    mg.clearRect(0, 0, 64, 72); drawDetective(mg, 32, 68, done ? 0 : Math.floor(t / 110), { flip: B[0] < A[0] });
+    g.drawImage(man, Math.round(x - 32 * sc), Math.round(y - 68 * sc), Math.round(64 * sc), Math.round(72 * sc));
+    if (path.front) path.front(g);
+    const st = Math.floor(t / 260); if (!done && st !== lastStep) { lastStep = st; SFX.step(true); }
+    if (t < WALK + 400) anim.raf = requestAnimationFrame(step); else finishWalk();
+  };
+  anim = { raf: requestAnimationFrame(step) };
+}
+function endDanger() { if (S && S.screen === "danger") { S.screen = "witness"; sel = 0; render(); } }
+function finishWalk() { if (S && S.screen === "walk") { stopAnim(); investigate(S.walkTo); sel = 0; render(); } }
+
+function finishChase() { if (S && S.screen === "chase") { end("caught"); sel = 0; render(); } }
+
+/* Drafted: a gold frame with stars over the portrait. */
+function drawBars(cv) {
+  const { R } = kit(cv.getContext("2d")), G = "#ffd60a", D = "#c99a00";
+  R(0, 0, 96, 4, G); R(0, 92, 96, 4, G); R(0, 0, 4, 96, G); R(92, 0, 4, 96, G); R(4, 4, 88, 1, D); R(4, 91, 88, 1, D);
+  for (const [x, y] of [[8, 8], [82, 8], [8, 82], [82, 82]]) { R(x + 2, y, 2, 6, G); R(x, y + 2, 6, 2, G); }
+}
+/* Fit the 800x480 screen to the available width. */
+function fit() {
+  const w = document.getElementById("wrap").clientWidth;
+  document.getElementById("stage").style.transform = `scale(${Math.min(1, w / 800)})`;
+}
+new ResizeObserver(fit).observe(document.getElementById("wrap"));
+
+window.claude?.hot?.snapshot?.(() => ({ S, sel, P, ui }));
+function start(data) {
+  if (data && data.P) { P = data.P; ui = data.ui ?? null; }
+  S = P && data && data.S && (data.S.clues || data.S.screen === "dossiers") ? data.S : null;
+  if (S && ["flying", "chase", "walk"].includes(S.screen)) S.screen = S.screen === "flying" ? "fly" : "inv";
+  sel = (S && data.sel) || 0;
+  fit(); render();
+}
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
