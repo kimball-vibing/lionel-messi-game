@@ -377,7 +377,7 @@
     federer: { st: 'short', kit: [[245, 245, 245], [220, 30, 40]], pose: 'front' },
     phelps:  { st: 'short', kit: [[30, 50, 130], [240, 240, 240]], pose: 'glanceL' },
     tiger:   { st: 'short', kit: [[210, 24, 36], [30, 30, 40]], pose: 'threeR' },
-    deskin:  { st: 'short', kit: [[40, 170, 90], [255, 255, 255]], num: 10, pose: 'front' },
+    deskin:  { st: 'short', kit: [[214, 30, 44], [255, 255, 255]], num: 2, pose: 'front' },
     messi:   { st: 'short', beard: 'full', kit: [[120, 190, 240], [255, 255, 255]], stripes: [255, 255, 255], num: 10, pose: 'front' }
   };
   /* team colours as hex, for the running sprites in the chase */
@@ -1131,7 +1131,7 @@
       return;
     }
     if (job === 'sports') {
-      var cc = pick(mulberry(t.sd + 9), [[50, 110, 220], [220, 60, 60], [40, 170, 110], [100, 80, 200], [250, 150, 40]]), r2 = rp(cc);
+      var cc = t.goat ? t.goat.kit[0] : pick(mulberry(t.sd + 9), [[50, 110, 220], [220, 60, 60], [40, 170, 110], [100, 80, 200], [250, 150, 40]]), r2 = rp(cc);
       begin(GR.hat, HAT);
       area(cx - rx - 3, bandY - ry, cx + rx + 3, bandY + 2, function (qx, qy) { var a = (qx - cx) / (rx + 1.2), b = (qy - bandY - 0.5) / (ry * 0.62 + 1); return a * a + b * b < 1 && qy < bandY + 0.8; }, function (qx) {
         var dx = qx - cx; return Math.abs(dx + 0.3) < 0.6 ? r2[1] : dx > rx * 0.35 ? r2[1] : dx < -rx * 0.4 ? r2[3] : r2[2];
